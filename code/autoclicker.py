@@ -158,6 +158,48 @@ def on_load_points():
         print ("Points were not loaded")
 
 
+def on_create_mesh():
+    points = points_controller.get_points()
+    if len(points) != 3:
+        print("You need three points to use mesh")
+        return
+
+    first_coordinate = points[0]
+    second_coordinate = points[1]
+    third_coordinate = points[2]
+    height_amount = int(settings.get("MESH", "amount_height"))
+    width_amount = int(settings.get("MESH", "amount_width"))
+
+    delta_x = (second_coordinate._x - first_coordinate._x) / (width_amount-1)
+    delta_y = (third_coordinate._y - first_coordinate._y) / (height_amount-1)
+    init_x = first_coordinate._x
+    init_y = first_coordinate._y
+
+    points_controller.remove_all_points()
+
+    for y in range(height_amount):
+        for x in range(width_amount):
+            point = points_controller.create_point(
+                int(init_x + x*delta_x),
+                int(init_y + y*delta_y),
+                util.int_ms_to_float_seconds(int(settings.get("DELAYS", "delay_before"))),
+                util.int_ms_to_float_seconds(int(settings.get("DELAYS", "delay_after")))
+                )
+            points_controller.add_point(point)
+
+
+def is_settings_valid():
+    try:
+        int(settings.get("DELAYS", "delay_before"))
+        int(settings.get("DELAYS", "delay_after"))
+        int(settings.get("MESH", "amount_width"))
+        int(settings.get("MESH", "amount_height"))
+    except Exception as e:
+        print(e)
+        return False
+    return True
+
+
 def load_hotkeys_from_settings():
     for tag, hotkey in settings.get_hotkeys().items():
         hotkeys_storage.set_hotkey_by_tag(tag, hotkey)
@@ -200,6 +242,10 @@ def set_hotkeys(thread_controller):
             print("LOAD_POINTS set:", hotkey)
             keyboard.add_hotkey(hotkey, on_load_points, args=[])
 
+        if (tag == hotkeys_storage.CREATE_MESH_HOTKEY):
+            print("CREATE_MESH_HOTKEY set:", hotkey)
+            keyboard.add_hotkey(hotkey, on_create_mesh, args=[])
+
         if (tag == hotkeys_storage.EXIT_HOTKEY):
             print("EXIT set:", hotkey)
             keyboard.wait(hotkey)   
@@ -208,6 +254,10 @@ def set_hotkeys(thread_controller):
 def main():
     print("Welcome to autoclicker v0.1")
     thread_controller = ThreadController()
+
+    if not is_settings_valid():
+        print("ERROR: settigns are not valid")
+        return
 
     if not load_hotkeys_from_settings():
         print("ERROR: load_hotkeys_from_settings failed")
