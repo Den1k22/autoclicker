@@ -179,8 +179,6 @@ def load_custom_hotkeys(file_name="custom_keys.txt"):
         set_hotkey_by_tag(tag_and_hotkey[0], tag_and_hotkey[1])
 
     
-
-
 def set_hotkeys(thread_controller):
 
     for tag, hotkey  in hotkeys_storage.get_all_available_pairs().items():
