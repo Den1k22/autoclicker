@@ -30,6 +30,7 @@ class Settings(object):
 
         if (key == None):
             val = self.config[section]
+            return val
 
         try:
             val = self.config[section][key]
