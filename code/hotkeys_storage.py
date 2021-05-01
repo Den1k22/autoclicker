@@ -1,36 +1,28 @@
 
 
-ADD_POINT = "add_point_shortcut"
-REMOVE_LAST_POINT = "remove_last_point_shortcut"
-REMOVE_ALL_POINTS = "remove_all_points_shortcut"
-START_AUTOCLICKER = "start_autoclicker_shortcut"
-STOP_AUTOCLICKER = "stop_autoclicker_shortcut"
-ONE_AUTOCLICK_RUN = "one_autoclick_run_shortcut"
-SAVE_POINTS = "save_points_shortcut"
-LOAD_POINTS = "load_points_shortcut"
-EXIT = "exit_shortcut"
+ADD_POINT_HOTKEY = "add_point_hotkey"
+REMOVE_LAST_POINT_HOTKEY = "remove_last_point_hotkey"
+REMOVE_ALL_POINTS_HOTKEY = "remove_all_points_hotkey"
+START_AUTOCLICKER_HOTKEY = "start_autoclicker_hotkey"
+STOP_AUTOCLICKER_HOTKEY = "stop_autoclicker_hotkey"
+ONE_AUTOCLICK_RUN_HOTKEY = "one_autoclick_run_hotkey"
+SAVE_POINTS_HOTKEY = "save_points_hotkey"
+LOAD_POINTS_HOTKEY = "load_points_hotkey"
+EXIT_HOTKEY = "exit_hotkey"
+
+HOTKEY_TAGS = ( ADD_POINT_HOTKEY, REMOVE_LAST_POINT_HOTKEY, REMOVE_ALL_POINTS_HOTKEY, START_AUTOCLICKER_HOTKEY,
+                  STOP_AUTOCLICKER_HOTKEY, ONE_AUTOCLICK_RUN_HOTKEY, SAVE_POINTS_HOTKEY, LOAD_POINTS_HOTKEY, EXIT_HOTKEY )
+
+_hotkeys = {}
 
 
-_hotkeys = {
-    ADD_POINT: "ctrl+alt+space",
-    REMOVE_LAST_POINT: "ctrl+alt+z",
-    REMOVE_ALL_POINTS: "ctrl+alt+c",
-    START_AUTOCLICKER: "ctrl+alt+[",
-    STOP_AUTOCLICKER: "ctrl+alt+]",
-    ONE_AUTOCLICK_RUN: "ctrl+alt+'",
-    SAVE_POINTS: "ctrl+alt+s",
-    LOAD_POINTS: "ctrl+alt+l",
-    EXIT: "ctrl+alt+q"
-    }
+def init():
+    for shotcut_tag in HOTKEY_TAGS:
+        _hotkeys[shotcut_tag] = ""
 
-def get_all_available_pairs():
-    present_keys = {}
 
-    for key, value in _hotkeys.items():
-        if (get_hotkey_by_tag(key)):
-            present_keys[key] = value
-
-    return present_keys
+def get_all_available_hotkeys():
+    return _hotkeys
 
 
 def get_hotkey_by_tag(tag):
@@ -46,3 +38,15 @@ def set_hotkey_by_tag(tag, hotkey):
         return True
     else:
         return False
+
+
+def is_storage_valid():
+    valid = True
+    for hotkey_tag in HOTKEY_TAGS:
+        if (_hotkeys[hotkey_tag] == ""):
+            valid = False
+            break
+    return valid
+
+
+init()

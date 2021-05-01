@@ -7,6 +7,7 @@ import time
 import hotkeys_storage
 import points_controller
 import mouse_controller
+import settings
 import util
 
 
@@ -157,65 +158,49 @@ def on_load_points():
         print ("Points were not loaded")
 
 
-def load_custom_hotkeys(file_name="custom_keys.txt"):
-    if not os.path.isfile(file_name):
-        return
+def load_hotkeys_from_settings():
+    for tag, hotkey in settings.get_hotkeys().items():
+        hotkeys_storage.set_hotkey_by_tag(tag, hotkey)
 
-    f = open(file_name, "r")
-    text = f.readlines()
-    f.close()
-
-    for line in text:
-        clean_line = line.replace("\n", "")
-        clean_line = clean_line.replace(" ", "")
-        if (line == "" or line.startswith("#")):
-            continue
-
-        tag_and_hotkey = clean_line.split("=")
-
-        if (tag_and_hotkey != 2):
-            continue
-
-        set_hotkey_by_tag(tag_and_hotkey[0], tag_and_hotkey[1])
+    return hotkeys_storage.is_storage_valid()
 
     
 def set_hotkeys(thread_controller):
+    for tag, hotkey  in hotkeys_storage.get_all_available_hotkeys().items():
 
-    for tag, hotkey  in hotkeys_storage.get_all_available_pairs().items():
-
-        if (tag == hotkeys_storage.ADD_POINT):
+        if (tag == hotkeys_storage.ADD_POINT_HOTKEY):
             print("ADD_POINT set:", hotkey)
             keyboard.add_hotkey(hotkey, on_add_point, args=[])
 
-        if (tag == hotkeys_storage.REMOVE_LAST_POINT):
+        if (tag == hotkeys_storage.REMOVE_LAST_POINT_HOTKEY):
             print("REMOVE_LAST_POINT set:", hotkey)
             keyboard.add_hotkey(hotkey, on_remove_last_point, args=[])
 
-        if (tag == hotkeys_storage.REMOVE_ALL_POINTS):
+        if (tag == hotkeys_storage.REMOVE_ALL_POINTS_HOTKEY):
             print("REMOVE_ALL_POINTS set:", hotkey)
             keyboard.add_hotkey(hotkey, remove_all_points, args=[])
 
-        if (tag == hotkeys_storage.START_AUTOCLICKER):
+        if (tag == hotkeys_storage.START_AUTOCLICKER_HOTKEY):
             print("START_AUTOCLICKER set:", hotkey)
             keyboard.add_hotkey(hotkey, on_start_autoclicker, args=[thread_controller])
 
-        if (tag == hotkeys_storage.STOP_AUTOCLICKER):
+        if (tag == hotkeys_storage.STOP_AUTOCLICKER_HOTKEY):
             print("STOP_AUTOCLICKER set:", hotkey)
             keyboard.add_hotkey(hotkey, on_stop_autoclicker, args=[thread_controller])
 
-        if (tag == hotkeys_storage.ONE_AUTOCLICK_RUN):
+        if (tag == hotkeys_storage.ONE_AUTOCLICK_RUN_HOTKEY):
             print("ONE_AUTOCLICK_RUN set:", hotkey)
             keyboard.add_hotkey(hotkey, on_one_autoclick_run, args=[thread_controller])
 
-        if (tag == hotkeys_storage.SAVE_POINTS):
+        if (tag == hotkeys_storage.SAVE_POINTS_HOTKEY):
             print("SAVE_POINTS set:", hotkey)
             keyboard.add_hotkey(hotkey, on_save_points, args=[])
 
-        if (tag == hotkeys_storage.LOAD_POINTS):
+        if (tag == hotkeys_storage.LOAD_POINTS_HOTKEY):
             print("LOAD_POINTS set:", hotkey)
             keyboard.add_hotkey(hotkey, on_load_points, args=[])
 
-        if (tag == hotkeys_storage.EXIT):
+        if (tag == hotkeys_storage.EXIT_HOTKEY):
             print("EXIT set:", hotkey)
             keyboard.wait(hotkey)   
 
@@ -223,6 +208,10 @@ def set_hotkeys(thread_controller):
 def main():
     print("Welcome to autoclicker v0.1")
     thread_controller = ThreadController()
+
+    if not load_hotkeys_from_settings():
+        print("ERROR: load_hotkeys_from_settings failed")
+        return
 
     set_hotkeys(thread_controller)
 
