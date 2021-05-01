@@ -189,6 +189,9 @@ def on_create_mesh():
 
 
 def is_settings_valid():
+    if (settings.getErrorStatus() != settings.ERROR_OK):
+        print("Error status:", settings.getErrorStatus())
+        return False
     try:
         int(settings.get("DELAYS", "delay_before"))
         int(settings.get("DELAYS", "delay_after"))
@@ -256,7 +259,8 @@ def main():
     thread_controller = ThreadController()
 
     if not is_settings_valid():
-        print("ERROR: settigns are not valid")
+        print("ERROR: settigns are not valid or not present")
+        input("Press enter to exit")
         return
 
     if not load_hotkeys_from_settings():
