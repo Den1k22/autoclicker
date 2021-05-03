@@ -6,7 +6,7 @@ Run the tool with `autoclicker.exe`
 Use hotkeys to control the tool. Hotkeys are defined in `conf/settings.ini`
 
 # Hotkeys
-* `add_point_hotkey` - add new point to click
+* `add_point_hotkey` - add to points to click current cursor location 
 * `remove_last_point_hotkey` - remove last added point
 * `remove_all_points_hotkey` - remove all points
 * `start_autoclicker_hotkey` - start autocliker continuously
