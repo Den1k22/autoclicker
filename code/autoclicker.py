@@ -4,24 +4,13 @@ import keyboard
 import os
 import time
 
+from thread_controller import ThreadController
 import hotkeys_storage
 import points_controller
 import mouse_controller
+import cv_controller
 import settings
 import util
-
-
-class ThreadController:
-
-    def __init__(self):
-        self.work = True
-
-    def is_working(self):
-        return self.work
-
-    def change_state(self, state):
-        self.work = state
-
 
 def on_add_point():
     pos = mouse_controller.get_mouse_position()
@@ -36,7 +25,7 @@ def remove_all_points():
     points_controller.remove_all_points()
 
 
-def click_all_points(thread_controller, clicking_points):
+def click_all_points(thread_controller: ThreadController, clicking_points):
     for point in clicking_points:
         if not thread_controller.is_working():
             break
@@ -47,7 +36,7 @@ def click_all_points(thread_controller, clicking_points):
         time.sleep(point.get_delay_after)
 
 
-def start_autoclicker(thread_controller, clicking_points):
+def start_autoclicker(thread_controller: ThreadController, clicking_points):
     while True:
         if not thread_controller.is_working():
             break
@@ -55,7 +44,7 @@ def start_autoclicker(thread_controller, clicking_points):
         click_all_points(thread_controller, clicking_points)
 
 
-def on_one_autoclick_run(thread_controller):
+def on_one_autoclick_run(thread_controller: ThreadController):
     print("on_one_autoclick_run")
 
     for th in threading.enumerate():
@@ -71,7 +60,7 @@ def on_one_autoclick_run(thread_controller):
     seq_thread.start()
 
 
-def on_start_autoclicker(thread_controller):
+def on_start_autoclicker(thread_controller: ThreadController):
     print("on_start_autoclicker")
 
     for th in threading.enumerate():
@@ -87,7 +76,7 @@ def on_start_autoclicker(thread_controller):
     seq_thread.start()
 
 
-def on_stop_autoclicker(thread_controller):
+def on_stop_autoclicker(thread_controller: ThreadController):
     print("on_stop_autoclicker")
     thread_controller.change_state(False)
 
@@ -187,6 +176,20 @@ def on_create_mesh():
                 )
             points_controller.add_point(point)
 
+def on_start_stop_cv(thread_controller: ThreadController):
+    if thread_controller.is_working():
+        print("cv stop")
+        thread_controller.change_state(False)
+    else:
+        print("cv start")
+        thread_controller.change_state(True)
+        seq_thread = threading.Thread(
+            target=cv_controller.cv_runner,
+            daemon=True,
+            args=[thread_controller],
+            name="cv_clicker_job")
+        seq_thread.start()
+
 
 def is_settings_valid():
     if (settings.getErrorStatus() != settings.ERROR_OK):
@@ -248,6 +251,10 @@ def set_hotkeys(thread_controller):
         if (tag == hotkeys_storage.CREATE_MESH_HOTKEY):
             print("CREATE_MESH_HOTKEY set:", hotkey)
             keyboard.add_hotkey(hotkey, on_create_mesh, args=[])
+
+        if (tag == hotkeys_storage.START_STOP_CV_HOTKEY):
+            print("START_STOP_CV_HOTKEY set:", hotkey)
+            keyboard.add_hotkey(hotkey, on_start_stop_cv, args=[thread_controller])
 
         if (tag == hotkeys_storage.EXIT_HOTKEY):
             print("EXIT set:", hotkey)
