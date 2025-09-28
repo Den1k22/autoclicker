@@ -9,7 +9,7 @@ import mouse_controller
 monitor_region = {"top": 480, "left": 470, "width": 670, "height": 80} # for 2k
 
 # exact color 185, 238, 64
-target_rgb = (185, 238, 64)
+target_rgb = (188, 255, 71)
 target_bgr = (target_rgb[2], target_rgb[1], target_rgb[0])  # BGR for OpenCV
 
 from thread_controller import ThreadController
@@ -30,5 +30,6 @@ def cv_runner(thread_controller: ThreadController):
             if contours:
                 mouse_controller.click_left_button()
                 time.sleep(0.2)
+                mouse_controller.click_left_button()
 
             time.sleep(0.1)

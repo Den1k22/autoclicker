@@ -3,7 +3,7 @@
 class ThreadController:
 
     def __init__(self):
-        self.work = True
+        self.work = False
 
     def is_working(self):
         return self.work
