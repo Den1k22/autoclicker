@@ -262,7 +262,7 @@ def set_hotkeys(thread_controller):
 
 
 def main():
-    print("Welcome to autoclicker v0.1")
+    print("Welcome to autoclicker v0.3")
     thread_controller = ThreadController()
 
     if not is_settings_valid():
