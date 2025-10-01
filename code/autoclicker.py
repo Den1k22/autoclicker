@@ -218,43 +218,43 @@ def set_hotkeys(thread_controller):
 
         if (tag == hotkeys_storage.ADD_POINT_HOTKEY):
             print("ADD_POINT set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_add_point, args=[])
+            keyboard.add_hotkey(hotkey, on_add_point, args=())
 
         if (tag == hotkeys_storage.REMOVE_LAST_POINT_HOTKEY):
             print("REMOVE_LAST_POINT set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_remove_last_point, args=[])
+            keyboard.add_hotkey(hotkey, on_remove_last_point, args=())
 
         if (tag == hotkeys_storage.REMOVE_ALL_POINTS_HOTKEY):
             print("REMOVE_ALL_POINTS set:", hotkey)
-            keyboard.add_hotkey(hotkey, remove_all_points, args=[])
+            keyboard.add_hotkey(hotkey, remove_all_points, args=())
 
         if (tag == hotkeys_storage.START_AUTOCLICKER_HOTKEY):
             print("START_AUTOCLICKER set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_start_autoclicker, args=[thread_controller])
+            keyboard.add_hotkey(hotkey, on_start_autoclicker, args=(thread_controller,))
 
         if (tag == hotkeys_storage.STOP_AUTOCLICKER_HOTKEY):
             print("STOP_AUTOCLICKER set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_stop_autoclicker, args=[thread_controller])
+            keyboard.add_hotkey(hotkey, on_stop_autoclicker, args=(thread_controller,))
 
         if (tag == hotkeys_storage.ONE_AUTOCLICK_RUN_HOTKEY):
             print("ONE_AUTOCLICK_RUN set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_one_autoclick_run, args=[thread_controller])
+            keyboard.add_hotkey(hotkey, on_one_autoclick_run, args=(thread_controller,))
 
         if (tag == hotkeys_storage.SAVE_POINTS_HOTKEY):
             print("SAVE_POINTS set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_save_points, args=[])
+            keyboard.add_hotkey(hotkey, on_save_points, args=())
 
         if (tag == hotkeys_storage.LOAD_POINTS_HOTKEY):
             print("LOAD_POINTS set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_load_points, args=[])
+            keyboard.add_hotkey(hotkey, on_load_points, args=())
 
         if (tag == hotkeys_storage.CREATE_MESH_HOTKEY):
             print("CREATE_MESH_HOTKEY set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_create_mesh, args=[])
+            keyboard.add_hotkey(hotkey, on_create_mesh, args=())
 
         if (tag == hotkeys_storage.START_STOP_CV_HOTKEY):
             print("START_STOP_CV_HOTKEY set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_start_stop_cv, args=[thread_controller])
+            keyboard.add_hotkey(hotkey, on_start_stop_cv, args=(thread_controller,))
 
         if (tag == hotkeys_storage.EXIT_HOTKEY):
             print("EXIT set:", hotkey)
