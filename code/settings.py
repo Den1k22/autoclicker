@@ -14,6 +14,32 @@ ERROR_PATH = 3
 ERROR_SAVE = 4
 ERROR_LOAD = 5
 
+DEFAULTS = {"MAIN": {"MODE": "PROD"}, 
+            "HOTKEYS": {"add_point_hotkey": "ctrl+alt+space",
+                        "remove_last_point_hotkey": "ctrl+alt+z",
+                        "remove_all_points_hotkey": "ctrl+alt+c",
+                        "start_autoclicker_hotkey": "ctrl+alt+[",
+                        "stop_autoclicker_hotkey": "ctrl+alt+]",
+                        "one_autoclick_run_hotkey": "ctrl+alt+\\",
+                        "save_points_hotkey": "ctrl+alt+s",
+                        "load_points_hotkey": "ctrl+alt+l",
+                        "create_mesh_hotkey": "ctrl+alt+m",
+                        "start_stop_cv_hotkey": "ctrl+alt+v",
+                        "exit_hotkey": "ctrl+alt+q"},
+            "DELAYS": {"delay_before": "50",
+                        "delay_after": "50"},
+            "MESH": {"amount_width": "24",
+                        "amount_height": "24"},
+            "CV": {"monitor_region_top": "480",
+                    "monitor_region_left": "470",
+                    "monitor_region_width": "670",
+                    "monitor_region_height": "80",
+                    "target_rgb_r": "188",
+                    "target_rgb_g": "255",
+                    "target_rgb_b": "71",
+                    "delay_between_frames": "50"}
+            }
+
 
 class Settings(object):
 
@@ -25,20 +51,15 @@ class Settings(object):
         self.saved = True
         self.error = ERROR_OK  # get: 1, put: 2, save: 3,4, load: 5,6
 
-    def get(self, section, key=None):
-        val = None
-
-        if (key == None):
-            val = self.config[section]
-            return val
-
+    def get(self, section, key) -> str | None:
         try:
-            val = self.config[section][key]
+            return self.config[section][key]
         except Exception as e:
             print("Settings.get: Could not get", e)
-            self.error = ERROR_GET
+            return None
 
-        return val
+    def get_section(self, section):
+        return self.config[section]
 
     def put(self, section, key, value):
         if (not self.config.has_section(section)):
@@ -99,12 +120,16 @@ class Settings(object):
         return self.error
 
 
-def get(section, key):
-    return settings.get(section, key)
+def get(section, key) -> str:
+    value_from_settings = settings.get(section, key)
+    if value_from_settings:
+        return value_from_settings
+    else:
+        return DEFAULTS[section][key]
 
 
 def get_hotkeys():
-    return settings.get(HOTKEYS_SECTION)
+    return settings.get_section(HOTKEYS_SECTION)
 
 
 def getErrorStatus():
