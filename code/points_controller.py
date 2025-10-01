@@ -1,6 +1,5 @@
 
 
-
 class Point:
 
     def __init__(self, x, y, delay_before, delay_after):
@@ -48,11 +47,14 @@ class PointsStorage:
 def add_point(point):
     points_storage[current_storage].add_point(point)
 
+
 def remove_last_point():
     points_storage[current_storage].remove_last_point()
 
+
 def remove_all_points():
     points_storage[current_storage].remove_all_points()
+
 
 def get_points():
     return points_storage[current_storage].get_points()
@@ -66,4 +68,3 @@ current_storage = 0
 points_storage = {}
 
 points_storage[current_storage] = PointsStorage()
-

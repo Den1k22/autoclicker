@@ -14,7 +14,7 @@ ERROR_PATH = 3
 ERROR_SAVE = 4
 ERROR_LOAD = 5
 
-DEFAULTS = {"MAIN": {"MODE": "PROD"}, 
+DEFAULTS = {"MAIN": {"MODE": "PROD"},
             "HOTKEYS": {"add_point_hotkey": "ctrl+alt+space",
                         "remove_last_point_hotkey": "ctrl+alt+z",
                         "remove_all_points_hotkey": "ctrl+alt+c",
@@ -27,17 +27,17 @@ DEFAULTS = {"MAIN": {"MODE": "PROD"},
                         "start_stop_cv_hotkey": "ctrl+alt+v",
                         "exit_hotkey": "ctrl+alt+q"},
             "DELAYS": {"delay_before": "50",
-                        "delay_after": "50"},
+                       "delay_after": "50"},
             "MESH": {"amount_width": "24",
-                        "amount_height": "24"},
+                     "amount_height": "24"},
             "CV": {"monitor_region_top": "480",
-                    "monitor_region_left": "470",
-                    "monitor_region_width": "670",
-                    "monitor_region_height": "80",
-                    "target_rgb_r": "188",
-                    "target_rgb_g": "255",
-                    "target_rgb_b": "71",
-                    "delay_between_frames": "50"}
+                   "monitor_region_left": "470",
+                   "monitor_region_width": "670",
+                   "monitor_region_height": "80",
+                   "target_rgb_r": "188",
+                   "target_rgb_g": "255",
+                   "target_rgb_b": "71",
+                   "delay_between_frames": "50"}
             }
 
 
@@ -98,7 +98,7 @@ class Settings(object):
             print("Settings.load -> chdir:", self.path, e)
             self.error = ERROR_PATH
 
-        if (self.error != ERROR_PATH): # If path is ok -> load
+        if (self.error != ERROR_PATH):  # If path is ok -> load
             try:
                 f = open(self.file_name, 'r')  # check that file exist
                 f.close()

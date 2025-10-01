@@ -12,6 +12,7 @@ import cv_controller
 import settings
 import util
 
+
 def on_add_point():
     pos = mouse_controller.get_mouse_position()
     points_controller.add_point(points_controller.create_point(pos[0], pos[1]))
@@ -86,9 +87,9 @@ def on_save_points(file_name="points.txt"):
 
     for point in points_controller.get_points():
         string_to_save = (str(point.get_x) + ","
-                         + str(point.get_y) + "," 
-                         + str(util.float_seconds_to_int_ms(point.get_delay_before)) + ","
-                         + str(util.float_seconds_to_int_ms(point.get_delay_after)) + "\n")
+                          + str(point.get_y) + ","
+                          + str(util.float_seconds_to_int_ms(point.get_delay_before)) + ","
+                          + str(util.float_seconds_to_int_ms(point.get_delay_after)) + "\n")
         f.write(string_to_save)
 
     f.close()
@@ -120,11 +121,11 @@ def load_points(file_name="points.txt"):
         if (util.are_all_strings_are_convertable_to_int(raw_points)):
             # TODO check that coordinates are in monitor's dimensions
             new_points.append(points_controller.create_point(
-                int(raw_points[0]), 
-                int(raw_points[1]), 
+                int(raw_points[0]),
+                int(raw_points[1]),
                 util.int_ms_to_float_seconds(int(raw_points[2])),
                 util.int_ms_to_float_seconds(int(raw_points[3])))
-                )
+            )
         else:
             ok_status = False
             break
@@ -142,9 +143,9 @@ def load_points(file_name="points.txt"):
 
 def on_load_points():
     if load_points():
-        print ("Points loaded successfully")
+        print("Points loaded successfully")
     else:
-        print ("Points were not loaded")
+        print("Points were not loaded")
 
 
 def on_create_mesh():
@@ -173,8 +174,9 @@ def on_create_mesh():
                 int(init_y + y*delta_y),
                 util.int_ms_to_float_seconds(int(settings.get("DELAYS", "delay_before"))),
                 util.int_ms_to_float_seconds(int(settings.get("DELAYS", "delay_after")))
-                )
+            )
             points_controller.add_point(point)
+
 
 def on_start_stop_cv(thread_controller: ThreadController):
     if thread_controller.is_working():
@@ -212,9 +214,9 @@ def load_hotkeys_from_settings():
 
     return hotkeys_storage.is_storage_valid()
 
-    
+
 def set_hotkeys(thread_controller):
-    for tag, hotkey  in hotkeys_storage.get_all_available_hotkeys().items():
+    for tag, hotkey in hotkeys_storage.get_all_available_hotkeys().items():
 
         if (tag == hotkeys_storage.ADD_POINT_HOTKEY):
             print("ADD_POINT set:", hotkey)
@@ -258,7 +260,7 @@ def set_hotkeys(thread_controller):
 
         if (tag == hotkeys_storage.EXIT_HOTKEY):
             print("EXIT set:", hotkey)
-            keyboard.wait(hotkey)   
+            keyboard.wait(hotkey)
 
 
 def main():
@@ -275,5 +277,6 @@ def main():
         return
 
     set_hotkeys(thread_controller)
+
 
 main()

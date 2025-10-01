@@ -18,3 +18,13 @@ Use hotkeys to control the tool. Hotkeys are defined in `conf/settings.ini`
 * `load_points_hotkey` - load points from `points.txt`. !NOTE: all currents points will be removed
 * `create_mesh_hotkey` - create mesh of clicking points. It uses three user defined points. `amount_width` and `amount_height` in `conf/settings.ini` defines how much points should be in the row and column respectively.
 * `exit_hotkey` - exit from the tool
+
+# For Devs
+Write this in settings for autopep8
+```
+"[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.autopep8"
+},
+"autopep8.args": ["--max-line-length", "120"]
+```

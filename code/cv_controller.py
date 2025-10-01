@@ -1,4 +1,5 @@
 
+from thread_controller import ThreadController
 import time
 import cv2
 import numpy as np
@@ -23,7 +24,6 @@ delay_bettween_frames = util.int_ms_to_float_seconds(int(settings.get("CV", "del
 
 target_bgr = (target_rgb_b, target_rgb_g, target_rgb_r)  # BGR for OpenCV
 
-from thread_controller import ThreadController
 
 def cv_runner(thread_controller: ThreadController):
     with mss.mss() as sct:
