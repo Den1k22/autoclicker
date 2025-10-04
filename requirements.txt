@@ -5,7 +5,7 @@ mss==10.1.0
 numpy==2.2.6
 opencv-python==4.12.0.88
 packaging==25.0
-pefile==2023.2.7
+pefile==2024.8.26
 pycodestyle==2.14.0
 pyinstaller==6.16.0
 pyinstaller-hooks-contrib==2025.9
