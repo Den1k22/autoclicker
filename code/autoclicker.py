@@ -11,6 +11,7 @@ import mouse_controller
 import cv_controller
 import settings
 import util
+import gui
 
 
 def on_add_point():
@@ -263,7 +264,7 @@ def set_hotkeys(thread_controller):
             keyboard.wait(hotkey)
 
 
-def main():
+def start_cli():
     print("Welcome to autoclicker v0.3")
     thread_controller = ThreadController()
 
@@ -277,6 +278,10 @@ def main():
         return
 
     set_hotkeys(thread_controller)
+
+
+def main():
+    gui.start_gui()
 
 
 main()
