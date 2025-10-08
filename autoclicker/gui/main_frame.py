@@ -1,3 +1,6 @@
+from autoclicker.gui.hotkey_control_panel import HotkeyControlPanel
+from autoclicker.gui.hotkeys_group_name_panel import HotkeysGroupNamePanel
+from autoclicker.code.settings import GROUPED_HOTKEYS
 import wx
 
 import gettext
@@ -8,7 +11,7 @@ class MainFrame (wx.Frame):
 
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=wx.EmptyString, pos=wx.DefaultPosition,
-                          size=wx.Size(760, 605), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
+                          size=wx.Size(800, 600), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
 
@@ -16,6 +19,7 @@ class MainFrame (wx.Frame):
 
         self.points_setion_panel = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
         self.points_setion_panel.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
+        self.points_setion_panel.SetMaxSize(wx.Size(300, -1))
 
         points_section_sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -30,7 +34,7 @@ class MainFrame (wx.Frame):
 
         self.points_list = wx.ListCtrl(self.points_setion_panel, wx.ID_ANY,
                                        wx.DefaultPosition, wx.DefaultSize, wx.LC_ALIGN_LEFT | wx.LC_ICON)
-        self.points_list.SetMinSize(wx.Size(200, 500))
+        self.points_list.SetMinSize(wx.Size(300, 500))
 
         points_section_sizer.Add(self.points_list, 0, wx.ALL, 5)
 
@@ -98,58 +102,23 @@ class MainFrame (wx.Frame):
         self.mesh_panel.Layout()
         mesh_panel_sizer.Fit(self.mesh_panel)
         self.settings_notebook.AddPage(self.mesh_panel, t(u"Mesh"), False)
-        self.controls_panel = wx.Panel(self.settings_notebook, wx.ID_ANY,
-                                       wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        self.scrolled_controls_panel = wx.ScrolledWindow(
+            self.settings_notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.HSCROLL | wx.VSCROLL)
+        self.scrolled_controls_panel.SetScrollRate(5, 5)
         controls_panel_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.hotkeys_group_name_panel = wx.Panel(self.controls_panel, wx.ID_ANY,
-                                                 wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-        self.hotkeys_group_name_panel.SetMaxSize(wx.Size(-1, 30))
+        for hotkeys_group_name, hotkeys in GROUPED_HOTKEYS:
+            hotkeys_group_name_panel = HotkeysGroupNamePanel(self.scrolled_controls_panel, hotkeys_group_name)
+            controls_panel_sizer.Add(hotkeys_group_name_panel, 1, wx.ALL | wx.EXPAND, 5)
 
-        hotkeys_group_name_sizer = wx.BoxSizer(wx.HORIZONTAL)
+            for name, text in hotkeys:
+                hotkey_panel = HotkeyControlPanel(self.scrolled_controls_panel, name, text)
+                controls_panel_sizer.Add(hotkey_panel, 1, wx.ALL | wx.EXPAND, 5)
 
-        self.hotkeys_group_name = wx.StaticText(self.hotkeys_group_name_panel, wx.ID_ANY, t(
-            u"Group name"), wx.DefaultPosition, wx.DefaultSize, 0)
-        self.hotkeys_group_name.Wrap(-1)
-
-        self.hotkeys_group_name.SetFont(wx.Font(wx.NORMAL_FONT.GetPointSize(
-        ), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString))
-
-        hotkeys_group_name_sizer.Add(self.hotkeys_group_name, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
-
-        self.hotkeys_group_name_panel.SetSizer(hotkeys_group_name_sizer)
-        self.hotkeys_group_name_panel.Layout()
-        hotkeys_group_name_sizer.Fit(self.hotkeys_group_name_panel)
-        controls_panel_sizer.Add(self.hotkeys_group_name_panel, 1, wx.ALL | wx.EXPAND, 5)
-
-        self.hotkey_control_panel = wx.Panel(self.controls_panel, wx.ID_ANY,
-                                             wx.DefaultPosition, wx.Size(-1, -1), wx.TAB_TRAVERSAL)
-        self.hotkey_control_panel.SetMaxSize(wx.Size(-1, 40))
-
-        hotkey_control_sizer = wx.BoxSizer(wx.HORIZONTAL)
-
-        self.hotkey_name = wx.StaticText(self.hotkey_control_panel, wx.ID_ANY, t(
-            u"Hotkey Name"), wx.DefaultPosition, wx.Size(200, -1), 0)
-        self.hotkey_name.Wrap(-1)
-
-        self.hotkey_name.SetFont(wx.Font(wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT,
-                                 wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString))
-
-        hotkey_control_sizer.Add(self.hotkey_name, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
-
-        self.hotkey_text = wx.TextCtrl(self.hotkey_control_panel, wx.ID_ANY,
-                                       wx.EmptyString, wx.DefaultPosition, wx.Size(300, -1), 0)
-        hotkey_control_sizer.Add(self.hotkey_text, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
-
-        self.hotkey_control_panel.SetSizer(hotkey_control_sizer)
-        self.hotkey_control_panel.Layout()
-        hotkey_control_sizer.Fit(self.hotkey_control_panel)
-        controls_panel_sizer.Add(self.hotkey_control_panel, 1, wx.ALL | wx.EXPAND, 5)
-
-        self.controls_panel.SetSizer(controls_panel_sizer)
-        self.controls_panel.Layout()
-        controls_panel_sizer.Fit(self.controls_panel)
-        self.settings_notebook.AddPage(self.controls_panel, t(u"Controls"), True)
+        self.scrolled_controls_panel.SetSizer(controls_panel_sizer)
+        self.scrolled_controls_panel.Layout()
+        controls_panel_sizer.Fit(self.scrolled_controls_panel)
+        self.settings_notebook.AddPage(self.scrolled_controls_panel, t(u"Controls"), True)
 
         main_frame_sizer.Add(self.settings_notebook, 1, wx.EXPAND | wx.ALL, 5)
 

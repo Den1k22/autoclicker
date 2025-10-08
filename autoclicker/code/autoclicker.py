@@ -11,7 +11,6 @@ import mouse_controller
 import cv_controller
 import settings
 import util
-import gui
 
 
 def on_add_point():
@@ -278,10 +277,3 @@ def start_cli():
         return
 
     set_hotkeys(thread_controller)
-
-
-def main():
-    gui.start_gui()
-
-
-main()

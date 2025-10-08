@@ -41,6 +41,39 @@ DEFAULTS = {"MAIN": {"MODE": "PROD"},
             }
 
 
+GROUPED_HOTKEYS = [("hotkeys_group", [("add_point_hotkey", "ctrl+alt+space"),
+                                      ("remove_last_point_hotkey", "ctrl+alt+z"),
+                                      ("remove_all_points_hotkey", "ctrl+alt+c"),
+                                      ("start_autoclicker_hotkey", "ctrl+alt+["),
+                                      ("stop_autoclicker_hotkey", "ctrl+alt+]"),
+                                      ("one_autoclick_run_hotkey", "ctrl+alt+\\"),
+                                      ("save_points_hotkey", "ctrl+alt+s"),
+                                      ("load_points_hotkey", "ctrl+alt+l"),
+                                      ("start_stop_cv_hotkey", "ctrl+alt+v")])
+                   ]
+
+DELAYS = [
+    ("delay_before", "50"),
+    ("delay_after", "50"),
+]
+
+MESH = [
+    ("amount_width", "24"),
+    ("amount_height", "24"),
+]
+
+CV = [
+    ("monitor_region_top", "480"),
+    ("monitor_region_left", "470"),
+    ("monitor_region_width", "670"),
+    ("monitor_region_height", "80"),
+    ("target_rgb_r", "188"),
+    ("target_rgb_g", "255"),
+    ("target_rgb_b", "71"),
+    ("delay_between_frames", "50"),
+]
+
+
 class Settings(object):
 
     def __init__(self, file_name, path):
