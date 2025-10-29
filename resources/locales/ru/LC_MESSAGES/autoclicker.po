@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-10 00:45+0300\n"
+"PO-Revision-Date: 2025-10-10 02:20+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.7\n"
+
+#: autoclicker/gui/about_dialog.py:18
+msgid "Thank you for using Autoclicker!"
+msgstr ""
+
+#: autoclicker/gui/about_dialog.py:25
+msgid "Version:"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:27
+msgid "Points"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:56
+msgid "General"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:64
+msgid "Computer vision"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:69
+msgid "3 dots"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:69
+msgid "1 dot"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:71
+msgid "Mesh options"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:82
+msgid "Value Name"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:104
+msgid "Mesh"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:121
+msgid "Controls"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:130
+msgid "Save"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:134
+msgid "Load"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:137
+msgid "Exit"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:140
+msgid "File"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:144
+msgid "About..."
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:147
+msgid "Help"
+msgstr ""
+
+#: autoclicker/gui/translations.py:5
+msgid "hotkeys_group"
+msgstr ""
+
+#: autoclicker/gui/translations.py:6
+msgid "add_point_hotkey"
+msgstr "Добавить точку"
+
+#: autoclicker/gui/translations.py:7
+msgid "remove_last_point_hotkey"
+msgstr ""
+
+#: autoclicker/gui/translations.py:8
+msgid "remove_all_points_hotkey"
+msgstr ""
+
+#: autoclicker/gui/translations.py:9
+msgid "start_autoclicker_hotkey"
+msgstr ""
+
+#: autoclicker/gui/translations.py:10
+msgid "stop_autoclicker_hotkey"
+msgstr ""
+
+#: autoclicker/gui/translations.py:11
+msgid "one_autoclick_run_hotkey"
+msgstr ""
+
+#: autoclicker/gui/translations.py:12
+msgid "save_points_hotkey"
+msgstr ""
+
+#: autoclicker/gui/translations.py:13
+msgid "load_points_hotkey"
+msgstr ""
+
+#: autoclicker/gui/translations.py:14
+msgid "start_stop_cv_hotkey"
+msgstr ""
