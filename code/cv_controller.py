@@ -22,11 +22,10 @@ target_rgb_g = int(settings.get("CV", "target_rgb_g"))
 target_rgb_b = int(settings.get("CV", "target_rgb_b"))
 
 delay_bettween_frames = util.int_ms_to_float_seconds(int(settings.get("CV", "delay_between_frames")))
+click_cooldown = util.int_ms_to_float_seconds(int(settings.get("CV", "click_cooldown")))
+second_click_delay = util.int_ms_to_float_seconds(int(settings.get("CV", "second_click_delay")))
 
 target_bgr = (target_rgb_b, target_rgb_g, target_rgb_r)  # BGR for OpenCV
-
-CLICK_COOLDOWN = 0.5
-SECOND_CLICK_DELAY = 1.0
 
 
 def cv_runner(thread_controller: ThreadController):
@@ -49,11 +48,11 @@ def cv_runner(thread_controller: ThreadController):
             now = time.time()
 
             if contours:
-                if now - last_click >= CLICK_COOLDOWN:
+                if now - last_click >= click_cooldown:
                     keyboard.press_and_release('space')
                     last_click = now
                     awaiting_second_click = True
-                    second_click_time = now + SECOND_CLICK_DELAY
+                    second_click_time = now + second_click_delay
                 # print(1)
                 # mouse_controller.click_left_button()
                 # print(2)
