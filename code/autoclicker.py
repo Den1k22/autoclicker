@@ -1,11 +1,12 @@
 
 import threading
-import keyboard
 import os
 import time
 
 from thread_controller import ThreadController
+import action_controller
 import hotkeys_storage
+import keyboard_controller
 import points_controller
 import mouse_controller
 import cv_controller
@@ -80,6 +81,12 @@ def on_start_autoclicker(thread_controller: ThreadController):
 def on_stop_autoclicker(thread_controller: ThreadController):
     print("on_stop_autoclicker")
     thread_controller.change_state(False)
+
+
+def on_exit(thread_controller: ThreadController, exit_event):
+    print("exit")
+    thread_controller.change_state(False)
+    exit_event.set()
 
 
 def on_save_points(file_name="points.txt"):
@@ -202,6 +209,14 @@ def is_settings_valid():
         int(settings.get("DELAYS", "delay_after"))
         int(settings.get("MESH", "amount_width"))
         int(settings.get("MESH", "amount_height"))
+
+        for setting_name, action in (("first_action", cv_controller.first_action),
+                                     ("second_action", cv_controller.second_action)):
+            try:
+                action_controller.parse_action(action)
+            except ValueError as e:
+                print("Invalid CV setting '" + setting_name + "':", e)
+                return False
     except Exception as e:
         print(e)
         return False
@@ -215,57 +230,58 @@ def load_hotkeys_from_settings():
     return hotkeys_storage.is_storage_valid()
 
 
-def set_hotkeys(thread_controller):
+def set_hotkeys(thread_controller, exit_event):
     for tag, hotkey in hotkeys_storage.get_all_available_hotkeys().items():
 
         if (tag == hotkeys_storage.ADD_POINT_HOTKEY):
             print("ADD_POINT set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_add_point, args=())
+            keyboard_controller.add_hotkey(hotkey, on_add_point, args=())
 
         if (tag == hotkeys_storage.REMOVE_LAST_POINT_HOTKEY):
             print("REMOVE_LAST_POINT set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_remove_last_point, args=())
+            keyboard_controller.add_hotkey(hotkey, on_remove_last_point, args=())
 
         if (tag == hotkeys_storage.REMOVE_ALL_POINTS_HOTKEY):
             print("REMOVE_ALL_POINTS set:", hotkey)
-            keyboard.add_hotkey(hotkey, remove_all_points, args=())
+            keyboard_controller.add_hotkey(hotkey, remove_all_points, args=())
 
         if (tag == hotkeys_storage.START_AUTOCLICKER_HOTKEY):
             print("START_AUTOCLICKER set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_start_autoclicker, args=(thread_controller,))
+            keyboard_controller.add_hotkey(hotkey, on_start_autoclicker, args=(thread_controller,))
 
         if (tag == hotkeys_storage.STOP_AUTOCLICKER_HOTKEY):
             print("STOP_AUTOCLICKER set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_stop_autoclicker, args=(thread_controller,))
+            keyboard_controller.add_hotkey(hotkey, on_stop_autoclicker, args=(thread_controller,))
 
         if (tag == hotkeys_storage.ONE_AUTOCLICK_RUN_HOTKEY):
             print("ONE_AUTOCLICK_RUN set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_one_autoclick_run, args=(thread_controller,))
+            keyboard_controller.add_hotkey(hotkey, on_one_autoclick_run, args=(thread_controller,))
 
         if (tag == hotkeys_storage.SAVE_POINTS_HOTKEY):
             print("SAVE_POINTS set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_save_points, args=())
+            keyboard_controller.add_hotkey(hotkey, on_save_points, args=())
 
         if (tag == hotkeys_storage.LOAD_POINTS_HOTKEY):
             print("LOAD_POINTS set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_load_points, args=())
+            keyboard_controller.add_hotkey(hotkey, on_load_points, args=())
 
         if (tag == hotkeys_storage.CREATE_MESH_HOTKEY):
             print("CREATE_MESH_HOTKEY set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_create_mesh, args=())
+            keyboard_controller.add_hotkey(hotkey, on_create_mesh, args=())
 
         if (tag == hotkeys_storage.START_STOP_CV_HOTKEY):
             print("START_STOP_CV_HOTKEY set:", hotkey)
-            keyboard.add_hotkey(hotkey, on_start_stop_cv, args=(thread_controller,))
+            keyboard_controller.add_hotkey(hotkey, on_start_stop_cv, args=(thread_controller,))
 
         if (tag == hotkeys_storage.EXIT_HOTKEY):
             print("EXIT set:", hotkey)
-            keyboard.wait(hotkey)
+            keyboard_controller.add_hotkey(hotkey, on_exit, args=(thread_controller, exit_event))
 
 
 def main():
     print("Welcome to autoclicker v0.3")
     thread_controller = ThreadController()
+    exit_event = threading.Event()
 
     if not is_settings_valid():
         print("ERROR: settigns are not valid or not present")
@@ -276,7 +292,12 @@ def main():
         print("ERROR: load_hotkeys_from_settings failed")
         return
 
-    set_hotkeys(thread_controller)
+    try:
+        set_hotkeys(thread_controller, exit_event)
+        exit_event.wait()
+    finally:
+        keyboard_controller.remove_all_hotkeys()
 
 
-main()
+if __name__ == "__main__":
+    main()

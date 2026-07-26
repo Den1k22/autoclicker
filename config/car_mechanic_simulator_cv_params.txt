@@ -1,0 +1,21 @@
+# repair
+monitor_region_top = 550
+monitor_region_left = 868
+monitor_region_width = 825
+monitor_region_height = 15
+target_rgb_r = 172
+target_rgb_g = 218
+target_rgb_b = 15
+delay_between_frames = 8
+
+# for parts
+monitor_region_top = 669
+monitor_region_left = 868
+monitor_region_width = 825
+monitor_region_height = 15
+target_rgb_r = 176
+target_rgb_g = 216
+target_rgb_b = 204
+delay_between_frames = 8
+
+
