@@ -83,6 +83,12 @@ def on_stop_autoclicker(thread_controller: ThreadController):
     thread_controller.change_state(False)
 
 
+def on_exit(thread_controller: ThreadController, exit_event):
+    print("exit")
+    thread_controller.change_state(False)
+    exit_event.set()
+
+
 def on_save_points(file_name="points.txt"):
     f = open(file_name, "w")
 
@@ -224,7 +230,7 @@ def load_hotkeys_from_settings():
     return hotkeys_storage.is_storage_valid()
 
 
-def set_hotkeys(thread_controller):
+def set_hotkeys(thread_controller, exit_event):
     for tag, hotkey in hotkeys_storage.get_all_available_hotkeys().items():
 
         if (tag == hotkeys_storage.ADD_POINT_HOTKEY):
@@ -269,12 +275,13 @@ def set_hotkeys(thread_controller):
 
         if (tag == hotkeys_storage.EXIT_HOTKEY):
             print("EXIT set:", hotkey)
-            keyboard_controller.wait_for_hotkey(hotkey)
+            keyboard_controller.add_hotkey(hotkey, on_exit, args=(thread_controller, exit_event))
 
 
 def main():
     print("Welcome to autoclicker v0.3")
     thread_controller = ThreadController()
+    exit_event = threading.Event()
 
     if not is_settings_valid():
         print("ERROR: settigns are not valid or not present")
@@ -285,7 +292,12 @@ def main():
         print("ERROR: load_hotkeys_from_settings failed")
         return
 
-    set_hotkeys(thread_controller)
+    try:
+        set_hotkeys(thread_controller, exit_event)
+        exit_event.wait()
+    finally:
+        keyboard_controller.remove_all_hotkeys()
 
 
-main()
+if __name__ == "__main__":
+    main()

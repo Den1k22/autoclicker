@@ -9,8 +9,8 @@ def add_hotkey(hotkey, callback, args=()):
     return keyboard.add_hotkey(hotkey, callback, args=args)
 
 
-def wait_for_hotkey(hotkey):
-    keyboard.wait(hotkey)
+def remove_all_hotkeys():
+    keyboard.remove_all_hotkeys()
 
 
 def is_valid_key(key):

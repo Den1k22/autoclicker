@@ -35,11 +35,11 @@ class KeyboardControllerTests(unittest.TestCase):
         self.assertEqual(result, "hook")
         add_hotkey.assert_called_once_with("ctrl+alt+v", callback, args=("argument",))
 
-    def test_hotkey_waiting_is_delegated(self):
-        with mock.patch.object(keyboard_controller.keyboard, "wait") as wait:
-            keyboard_controller.wait_for_hotkey("ctrl+alt+q")
+    def test_hotkey_cleanup_is_delegated(self):
+        with mock.patch.object(keyboard_controller.keyboard, "remove_all_hotkeys") as remove_all_hotkeys:
+            keyboard_controller.remove_all_hotkeys()
 
-        wait.assert_called_once_with("ctrl+alt+q")
+        remove_all_hotkeys.assert_called_once_with()
 
 
 class MouseControllerTests(unittest.TestCase):
