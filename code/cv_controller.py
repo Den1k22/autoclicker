@@ -4,9 +4,8 @@ import time
 import cv2
 import numpy as np
 import mss
-import keyboard
 
-import mouse_controller
+import action_controller
 import settings
 import util
 
@@ -24,6 +23,8 @@ target_rgb_b = int(settings.get("CV", "target_rgb_b"))
 delay_bettween_frames = util.int_ms_to_float_seconds(int(settings.get("CV", "delay_between_frames")))
 click_cooldown = util.int_ms_to_float_seconds(int(settings.get("CV", "click_cooldown")))
 second_click_delay = util.int_ms_to_float_seconds(int(settings.get("CV", "second_click_delay")))
+first_action = settings.get("CV", "first_action")
+second_action = settings.get("CV", "second_action")
 
 target_bgr = (target_rgb_b, target_rgb_g, target_rgb_r)  # BGR for OpenCV
 
@@ -49,19 +50,14 @@ def cv_runner(thread_controller: ThreadController):
 
             if contours:
                 if now - last_click >= click_cooldown:
-                    keyboard.press_and_release('space')
+                    action_controller.execute_action(first_action)
                     last_click = now
                     awaiting_second_click = True
                     second_click_time = now + second_click_delay
-                # print(1)
-                # mouse_controller.click_left_button()
-                # print(2)
-                # time.sleep(1)
-                # print(3)
 
             if awaiting_second_click and now >= second_click_time:
                 # current `contours` corresponds to the most recent frame
-                keyboard.press_and_release('space')
+                action_controller.execute_action(second_action)
                 awaiting_second_click = False
 
             time.sleep(delay_bettween_frames)

@@ -39,7 +39,9 @@ DEFAULTS = {"MAIN": {"MODE": "PROD"},
                    "target_rgb_b": "71",
                    "delay_between_frames": "50",
                    "click_cooldown": "500",
-                   "second_click_delay": "1000"}
+                   "second_click_delay": "1000",
+                   "first_action": "space",
+                   "second_action": "space"}
             }
 
 
