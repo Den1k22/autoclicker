@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=82"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "den1k22-autoclicker"
+dynamic = ["version"]
+description = "A local Windows autoclicker with recorded points and exact-color computer vision."
+readme = "README.md"
+requires-python = ">=3.14"
+license = {file = "LICENSE"}
+authors = [{name = "Den1k22"}]
+dependencies = [
+    "keyboard==0.13.5",
+    "mss==10.1.0",
+    "numpy==2.4.3",
+    "opencv-python==4.13.0.92",
+    "pynput==1.8.1",
+    "wxPython==4.2.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "autopep8==2.3.2",
+    "Babel==2.17.0",
+    "PyInstaller==6.19.0",
+    "pyinstaller-hooks-contrib==2026.3",
+]
+
+[project.scripts]
+autoclicker = "autoclicker.app:main"
+
+[tool.setuptools.packages.find]
+include = ["autoclicker*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "autoclicker.version.VERSION"}
+
+[tool.setuptools.package-data]
+"autoclicker.resources" = ["*.ini"]
+"autoclicker.i18n" = ["autoclicker.pot", "locales/*/LC_MESSAGES/*.po", "locales/*/LC_MESSAGES/*.mo"]
+
+[tool.autopep8]
+max_line_length = 120

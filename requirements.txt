@@ -1,15 +1,3 @@
-altgraph==0.17.5
-autopep8==2.3.2
-keyboard==0.13.5
-mss==10.1.0
-numpy==2.4.3
-opencv-python==4.13.0.92
-packaging==26.0
-pefile==2024.8.26
-pycodestyle==2.14.0
-pyinstaller==6.19.0
-pyinstaller-hooks-contrib==2026.3
-pynput==1.8.1
-pywin32-ctypes==0.2.3
-setuptools==82.0.1
-six==1.17.0
+# Dependency versions live in pyproject.toml so they are maintained in one place.
+# This compatibility file keeps `pip install -r requirements.txt` available.
+-e .[dev]
