@@ -1,0 +1,453 @@
+# Russian translations for Autoclicker.
+# Copyright (C) 2026 Den1k22
+# This file is distributed under the same license as the Autoclicker
+# project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Autoclicker 0.4.0\n"
+"Report-Msgid-Bugs-To: https://github.com/Den1k22/autoclicker/issues\n"
+"POT-Creation-Date: 2026-07-27 18:29+0300\n"
+"PO-Revision-Date: 2026-07-27 01:00+0300\n"
+"Last-Translator: Den1k22\n"
+"Language: ru\n"
+"Language-Team: Russian\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: autoclicker/gui/controller.py:72
+msgid "Coordinates must be integers and delays cannot be negative."
+msgstr ""
+"Координаты должны быть целыми числами, а задержки не могут быть "
+"отрицательными."
+
+#: autoclicker/gui/controller.py:79
+msgid "The selected point no longer exists."
+msgstr "Выбранная точка больше не существует."
+
+#: autoclicker/gui/controller.py:96
+msgid "Mesh generation requires exactly three points."
+msgstr "Для создания сетки необходимо ровно три точки."
+
+#: autoclicker/gui/controller.py:98
+msgid "Mesh width and height must both be greater than 1."
+msgstr "Ширина и высота сетки должны быть больше 1."
+
+#: autoclicker/gui/controller.py:149
+msgid "Global hotkeys are not initialized."
+msgstr "Глобальные горячие клавиши не инициализированы."
+
+#: autoclicker/gui/controller.py:161
+#, python-brace-format
+msgid "Could not apply settings: {error}"
+msgstr "Не удалось применить настройки: {error}"
+
+#: autoclicker/gui/controller.py:167
+msgid "Settings applied successfully."
+msgstr "Настройки успешно применены."
+
+#: autoclicker/gui/controller.py:201
+msgid "Another automation mode is already running."
+msgstr "Другой режим автоматизации уже запущен."
+
+#: autoclicker/gui/controller.py:204
+msgid "Record or load at least one point first."
+msgstr "Сначала запишите или загрузите хотя бы одну точку."
+
+#: autoclicker/gui/controller.py:218
+#, python-brace-format
+msgid "Could not save points: {error}"
+msgstr "Не удалось сохранить точки: {error}"
+
+#: autoclicker/gui/controller.py:242
+#, python-brace-format
+msgid "Automation stopped because of an error: {error}"
+msgstr "Автоматизация остановлена из-за ошибки: {error}"
+
+#: autoclicker/gui/main_frame.py:43
+msgid "Run once"
+msgstr "Запустить один раз"
+
+#: autoclicker/gui/main_frame.py:44
+msgid "Start points"
+msgstr "Запустить точки"
+
+#: autoclicker/gui/main_frame.py:45
+msgid "Start CV"
+msgstr "Запустить CV"
+
+#: autoclicker/gui/main_frame.py:46
+msgid "Stop"
+msgstr "Остановить"
+
+#: autoclicker/gui/main_frame.py:94
+msgid "Idle"
+msgstr "Ожидание"
+
+#: autoclicker/gui/main_frame.py:95
+msgid "Running points once"
+msgstr "Однократный проход по точкам"
+
+#: autoclicker/gui/main_frame.py:96
+msgid "Running points continuously"
+msgstr "Непрерывный проход по точкам"
+
+#: autoclicker/gui/main_frame.py:97
+msgid "Running computer vision"
+msgstr "Работает компьютерное зрение"
+
+#: autoclicker/gui/main_frame.py:107
+msgid "Autoclicker error"
+msgstr "Ошибка Autoclicker"
+
+#: autoclicker/gui/main_frame.py:110
+msgid "Autoclicker"
+msgstr "Autoclicker"
+
+#: autoclicker/gui/main_frame.py:115
+msgid "The points list has unsaved changes. Save before continuing?"
+msgstr ""
+"В списке точек есть несохранённые изменения. Сохранить их перед "
+"продолжением?"
+
+#: autoclicker/gui/main_frame.py:116
+msgid "Unsaved points"
+msgstr "Несохранённые точки"
+
+#: autoclicker/gui/main_frame.py:127
+msgid "Load points"
+msgstr "Загрузить точки"
+
+#: autoclicker/gui/main_frame.py:130 autoclicker/gui/main_frame.py:144
+msgid "Text files (*.txt)|*.txt|All files (*.*)|*.*"
+msgstr "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*"
+
+#: autoclicker/gui/main_frame.py:141
+msgid "Save points as"
+msgstr "Сохранить точки как"
+
+#: autoclicker/gui/main_frame.py:155
+msgid "&Load points...\tCtrl+O"
+msgstr "&Загрузить точки...\tCtrl+O"
+
+#: autoclicker/gui/main_frame.py:156
+msgid "&Save points\tCtrl+S"
+msgstr "&Сохранить точки\tCtrl+S"
+
+#: autoclicker/gui/main_frame.py:157
+msgid "Save points &as..."
+msgstr "Сохранить точки &как..."
+
+#: autoclicker/gui/main_frame.py:159
+msgid "E&xit"
+msgstr "В&ыход"
+
+#: autoclicker/gui/main_frame.py:160
+msgid "&File"
+msgstr "&Файл"
+
+#: autoclicker/gui/main_frame.py:163
+msgid "&About..."
+msgstr "&О программе..."
+
+#: autoclicker/gui/main_frame.py:164
+msgid "&Help"
+msgstr "&Справка"
+
+#: autoclicker/gui/panels/points.py:22
+msgid "Points"
+msgstr "Точки"
+
+#: autoclicker/gui/panels/points.py:32
+msgid "X"
+msgstr "X"
+
+#: autoclicker/gui/panels/points.py:33
+msgid "Y"
+msgstr "Y"
+
+#: autoclicker/gui/panels/points.py:34
+msgid "Before (ms)"
+msgstr "До (мс)"
+
+#: autoclicker/gui/panels/points.py:35
+msgid "After (ms)"
+msgstr "После (мс)"
+
+#: autoclicker/gui/panels/points.py:40
+msgid "Up"
+msgstr "Вверх"
+
+#: autoclicker/gui/panels/points.py:41
+msgid "Down"
+msgstr "Вниз"
+
+#: autoclicker/gui/panels/points.py:42
+msgid "Remove"
+msgstr "Удалить"
+
+#: autoclicker/gui/panels/points.py:43
+msgid "Clear"
+msgstr "Очистить"
+
+#: autoclicker/gui/panels/settings.py:29
+msgid "Language"
+msgstr "Язык"
+
+#: autoclicker/gui/panels/settings.py:43
+msgid "Language change takes effect after restarting the application."
+msgstr "Изменение языка вступит в силу после перезапуска приложения."
+
+#: autoclicker/gui/panels/settings.py:53
+msgid "Default delay before click (ms)"
+msgstr "Задержка перед кликом по умолчанию (мс)"
+
+#: autoclicker/gui/panels/settings.py:59
+msgid "Default delay after click (ms)"
+msgstr "Задержка после клика по умолчанию (мс)"
+
+#: autoclicker/gui/panels/settings.py:93
+msgid "Region top"
+msgstr "Верхняя граница области"
+
+#: autoclicker/gui/panels/settings.py:94
+msgid "Region left"
+msgstr "Левая граница области"
+
+#: autoclicker/gui/panels/settings.py:95
+msgid "Region width"
+msgstr "Ширина области"
+
+#: autoclicker/gui/panels/settings.py:96
+msgid "Region height"
+msgstr "Высота области"
+
+#: autoclicker/gui/panels/settings.py:97
+msgid "Target red"
+msgstr "Целевой красный"
+
+#: autoclicker/gui/panels/settings.py:98
+msgid "Target green"
+msgstr "Целевой зелёный"
+
+#: autoclicker/gui/panels/settings.py:99
+msgid "Target blue"
+msgstr "Целевой синий"
+
+#: autoclicker/gui/panels/settings.py:101
+msgid "Delay between frames (ms)"
+msgstr "Задержка между кадрами (мс)"
+
+#: autoclicker/gui/panels/settings.py:103
+msgid "Action cooldown (ms)"
+msgstr "Интервал между действиями (мс)"
+
+#: autoclicker/gui/panels/settings.py:105
+msgid "Second action delay (ms)"
+msgstr "Задержка второго действия (мс)"
+
+#: autoclicker/gui/panels/settings.py:107
+msgid "First action"
+msgstr "Первое действие"
+
+#: autoclicker/gui/panels/settings.py:108
+msgid "Second action"
+msgstr "Второе действие"
+
+#: autoclicker/gui/panels/settings.py:156
+msgid "Points across"
+msgstr "Точек по ширине"
+
+#: autoclicker/gui/panels/settings.py:157
+msgid "Points down"
+msgstr "Точек по высоте"
+
+#: autoclicker/gui/panels/settings.py:162
+msgid ""
+"Mesh generation uses exactly three recorded points: origin, horizontal "
+"extent, and vertical extent."
+msgstr ""
+"Для создания сетки используются ровно три записанные точки: начало, "
+"горизонтальная граница и вертикальная граница."
+
+#: autoclicker/gui/panels/settings.py:168
+msgid "Create mesh"
+msgstr "Создать сетку"
+
+#: autoclicker/gui/panels/settings.py:193
+#: autoclicker/gui/panels/settings.py:222
+msgid "Use one key or one simultaneous combination, for example ctrl+alt+s."
+msgstr ""
+"Используйте одну клавишу или одну одновременную комбинацию, например "
+"ctrl+alt+s."
+
+#: autoclicker/gui/panels/settings.py:197
+msgid "Restore default hotkeys"
+msgstr "Восстановить горячие клавиши"
+
+#: autoclicker/gui/panels/settings.py:243
+msgid "General"
+msgstr "Общие"
+
+#: autoclicker/gui/panels/settings.py:244
+msgid "Computer vision"
+msgstr "Компьютерное зрение"
+
+#: autoclicker/gui/panels/settings.py:245
+msgid "Mesh"
+msgstr "Сетка"
+
+#: autoclicker/gui/panels/settings.py:246
+msgid "Hotkeys"
+msgstr "Горячие клавиши"
+
+#: autoclicker/gui/panels/settings.py:251
+msgid "Restore all defaults"
+msgstr "Восстановить все настройки"
+
+#: autoclicker/gui/panels/settings.py:252
+msgid "Apply settings"
+msgstr "Применить настройки"
+
+#: autoclicker/i18n/messages.py:7
+msgid "About Autoclicker"
+msgstr "О программе Autoclicker"
+
+#: autoclicker/i18n/messages.py:8
+msgid "Local automation for recorded screen points and exact-color CV actions."
+msgstr ""
+"Локальная автоматизация записанных точек экрана и CV-действий по точному "
+"цвету."
+
+#: autoclicker/i18n/messages.py:9
+msgid "Version"
+msgstr "Версия"
+
+#: autoclicker/i18n/messages.py:10
+msgid "Close"
+msgstr "Закрыть"
+
+#: autoclicker/i18n/messages.py:11
+#, python-brace-format
+msgid "Global hotkeys could not be registered: {error}"
+msgstr "Не удалось зарегистрировать глобальные горячие клавиши: {error}"
+
+#: autoclicker/i18n/messages.py:12
+#, python-brace-format
+msgid "The default points file could not be loaded: {error}"
+msgstr "Не удалось загрузить файл точек по умолчанию: {error}"
+
+#: autoclicker/i18n/messages.py:13
+#, python-brace-format
+msgid "{count} point"
+msgid_plural "{count} points"
+msgstr[0] "{count} точка"
+msgstr[1] "{count} точки"
+msgstr[2] "{count} точек"
+
+#: autoclicker/i18n/messages.py:15
+msgid "Language must be English or Russian."
+msgstr "Язык должен быть английским или русским."
+
+#: autoclicker/i18n/messages.py:16
+msgid "Delay before a click cannot be negative."
+msgstr "Задержка перед кликом не может быть отрицательной."
+
+#: autoclicker/i18n/messages.py:17
+msgid "Delay after a click cannot be negative."
+msgstr "Задержка после клика не может быть отрицательной."
+
+#: autoclicker/i18n/messages.py:18
+msgid "Mesh width must be greater than 1."
+msgstr "Ширина сетки должна быть больше 1."
+
+#: autoclicker/i18n/messages.py:19
+msgid "Mesh height must be greater than 1."
+msgstr "Высота сетки должна быть больше 1."
+
+#: autoclicker/i18n/messages.py:20
+msgid "CV region width must be greater than 0."
+msgstr "Ширина области CV должна быть больше 0."
+
+#: autoclicker/i18n/messages.py:21
+msgid "CV region height must be greater than 0."
+msgstr "Высота области CV должна быть больше 0."
+
+#: autoclicker/i18n/messages.py:22
+msgid "RGB values must be between 0 and 255."
+msgstr "Значения RGB должны быть от 0 до 255."
+
+#: autoclicker/i18n/messages.py:23
+msgid "CV timing values cannot be negative."
+msgstr "Значения времени CV не могут быть отрицательными."
+
+#: autoclicker/i18n/messages.py:24
+msgid "Hotkeys cannot be empty."
+msgstr "Горячие клавиши не могут быть пустыми."
+
+#: autoclicker/i18n/messages.py:25
+msgid "Unsupported hotkey."
+msgstr "Неподдерживаемая горячая клавиша."
+
+#: autoclicker/i18n/messages.py:26
+msgid "Hotkey duplicates another action."
+msgstr "Горячая клавиша уже назначена другому действию."
+
+#: autoclicker/i18n/messages.py:27
+msgid "CV actions cannot be empty."
+msgstr "Действия CV не могут быть пустыми."
+
+#: autoclicker/i18n/messages.py:28
+msgid "Unsupported CV action."
+msgstr "Неподдерживаемое действие CV."
+
+#: autoclicker/settings/model.py:16
+msgid "Add point"
+msgstr "Добавить точку"
+
+#: autoclicker/settings/model.py:17
+msgid "Remove last point"
+msgstr "Удалить последнюю точку"
+
+#: autoclicker/settings/model.py:18
+msgid "Remove all points"
+msgstr "Удалить все точки"
+
+#: autoclicker/settings/model.py:19
+msgid "Start continuous clicking"
+msgstr "Запустить непрерывные клики"
+
+#: autoclicker/settings/model.py:20
+msgid "Stop automation"
+msgstr "Остановить автоматизацию"
+
+#: autoclicker/settings/model.py:21
+msgid "Run points once"
+msgstr "Пройти точки один раз"
+
+#: autoclicker/settings/model.py:22
+msgid "Start or stop computer vision"
+msgstr "Запустить или остановить компьютерное зрение"
+
+#: autoclicker/settings/model.py:23
+msgid "Exit application"
+msgstr "Выйти из приложения"
+
+#~ msgid "Language will change after the application is restarted."
+#~ msgstr "Язык изменится после перезапуска приложения."
+
+#~ msgid "The language setting has been saved. Restart now to apply it?"
+#~ msgstr ""
+#~ "Настройка языка сохранена. Перезапустить "
+#~ "приложение сейчас, чтобы применить её?"
+
+#~ msgid "Restart required"
+#~ msgstr "Требуется перезапуск"
+
+#~ msgid "Save points"
+#~ msgstr "Сохранить точки"
+

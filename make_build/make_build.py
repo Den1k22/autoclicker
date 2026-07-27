@@ -1,18 +1,50 @@
-
+from __future__ import annotations
 
 import subprocess
 import sys
-import os
+from pathlib import Path
 
-sys.path.append('..')
 
-MAIN_CONST = "../code/autoclicker.py"
-ICON_WINDOWS = ""
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+SPEC_FILE = Path(__file__).resolve().parent / "autoclicker.spec"
+BUILD_DIRECTORY = PROJECT_ROOT / "build"
 PROGRAM_NAME = "autoclicker"
+# Set this to an .ico path relative to PROJECT_ROOT when an icon is available.
+ICON_WINDOWS = ""
 
-line = "pyinstaller -F --distpath ../build --workpath ../build -n " + PROGRAM_NAME + " " + ICON_WINDOWS + " " + MAIN_CONST
-print(line)
-subprocess.call(line, shell=True)
-# os.remove(PROGRAM_NAME + ".spec")
 
-a = input("Press Enter to exit")
+def main() -> int:
+    pybabel = Path(sys.executable).with_name("pybabel.exe")
+    subprocess.run(
+        [
+            str(pybabel),
+            "compile",
+            "-d",
+            str(PROJECT_ROOT / "autoclicker" / "i18n" / "locales"),
+            "-D",
+            "autoclicker",
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+    )
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "PyInstaller",
+            "--clean",
+            "--noconfirm",
+            "--distpath",
+            str(BUILD_DIRECTORY),
+            "--workpath",
+            str(BUILD_DIRECTORY / "work"),
+            str(SPEC_FILE),
+        ],
+        cwd=PROJECT_ROOT,
+        check=True,
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

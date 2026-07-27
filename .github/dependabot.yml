@@ -1,6 +1,6 @@
 version: 2
 updates:
   - package-ecosystem: "pip"
-    directory: "/"            # Location of requirements.txt
+    directory: "/"            # Location of pyproject.toml
     schedule:
       interval: "weekly"      # "daily", "weekly", or "monthly"
