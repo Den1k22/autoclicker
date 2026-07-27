@@ -7,7 +7,7 @@ opencv-python==4.13.0.92
 packaging==26.0
 pefile==2024.8.26
 pycodestyle==2.14.0
-pyinstaller==6.19.0
+pyinstaller==6.21.0
 pyinstaller-hooks-contrib==2026.3
 pynput==1.8.1
 pywin32-ctypes==0.2.3
