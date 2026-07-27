@@ -75,6 +75,16 @@ class HotkeyManagerTests(unittest.TestCase):
         self.assertEqual(self.adapter.add_hotkey.call_count, len(hotkeys.as_dict()))
         self.adapter.remove_all_hotkeys.assert_called_once_with()
 
+    def test_fixed_preset_hotkeys_are_registered_with_every_active_set(self):
+        fixed = {"ctrl+1": mock.Mock(), "ctrl+0": mock.Mock()}
+        manager = HotkeyManager(self.adapter, self.callbacks, fixed)
+
+        manager.apply(make_hotkeys())
+
+        registered = [call.args[0] for call in self.adapter.add_hotkey.call_args_list]
+        self.assertIn("ctrl+1", registered)
+        self.assertIn("ctrl+0", registered)
+
     def test_closing_before_successful_registration_does_not_clear_uninitialized_listener(self):
         self.manager.close()
 

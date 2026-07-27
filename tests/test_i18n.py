@@ -15,6 +15,7 @@ class TranslatorTests(unittest.TestCase):
         translator = Translator("ru")
         self.assertEqual(translator("Points"), "Точки")
         self.assertEqual(translator("Add point"), "Добавить точку")
+        self.assertEqual(translator("Preset"), "Пресет")
         self.assertEqual(
             translator.ngettext("{count} point", "{count} points", 5).format(count=5),
             "5 точек",

@@ -40,9 +40,11 @@ class HotkeyManager:
         self,
         adapter: KeyboardAdapter,
         callbacks: Mapping[str, Callable[[], None]],
+        fixed_hotkeys: Mapping[str, Callable[[], None]] | None = None,
     ):
         self._adapter = adapter
         self._callbacks = dict(callbacks)
+        self._fixed_hotkeys = dict(fixed_hotkeys or {})
         self._current: HotkeySettings | None = None
         self._lock = threading.RLock()
 
@@ -93,4 +95,6 @@ class HotkeyManager:
     def _register(self, hotkeys: HotkeySettings) -> None:
         for name, hotkey in hotkeys.as_dict().items():
             self._adapter.add_hotkey(hotkey, self._callbacks[name])
+        for hotkey, callback in self._fixed_hotkeys.items():
+            self._adapter.add_hotkey(hotkey, callback)
         self._current = hotkeys

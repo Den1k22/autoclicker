@@ -55,8 +55,9 @@ that hide automation from a game or service.
 - Each run receives a tuple snapshot. Later point edits affect the next run only.
 - A point run moves, waits before, left-clicks, and waits after. Cancellation
   waits are interruptible.
-- The active point document defaults to portable `points.txt`. GUI Open/Save As
-  changes the active path used by GUI file actions.
+- Ten named presets each own settings and a point document path. Relative point
+  paths resolve from portable `config`; the default is `config/points.txt`.
+  GUI Open/Save As changes and persists the active preset's path.
 - Each non-comment row is `x,y,delay_before_ms,delay_after_ms`. Loading is
   all-or-nothing and supports signed coordinates. Empty or comment-only files
   represent an empty point list.
@@ -103,6 +104,8 @@ that hide automation from a game or service.
   activate a focused wx control.
 - Hotkey changes apply immediately. Delays, mesh, and CV values affect the next
   operation. Language is `en` or `ru` and applies after restart.
+- Ctrl+1 through Ctrl+9 select Presets 1 through 9; Ctrl+0 selects Preset 10.
+  These shortcuts are reserved, and switching stops active automation.
 - English strings are source fallback. Russian translations must remain complete.
 - Do not install gettext functions into Python builtins.
 - After UI text changes, update and compile catalogs:

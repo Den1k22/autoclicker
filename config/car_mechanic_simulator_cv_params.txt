@@ -1,4 +1,4 @@
-# repair
+# repair parts
 monitor_region_top = 550
 monitor_region_left = 868
 monitor_region_width = 825
@@ -8,7 +8,7 @@ target_rgb_g = 218
 target_rgb_b = 15
 delay_between_frames = 8
 
-# for parts
+# for disassemble parts
 monitor_region_top = 669
 monitor_region_left = 868
 monitor_region_width = 825

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import shutil
 from pathlib import Path
 
 import wx
@@ -20,6 +21,7 @@ from autoclicker.helpers.paths import (
     application_dir,
     config_path,
     default_settings_path,
+    legacy_points_path,
     points_path,
 )
 from autoclicker.i18n import Translator
@@ -74,24 +76,50 @@ class AutoclickerWxApp(wx.App):
         translator = Translator(settings.ui.language)
         translate = translator
 
+        configured_points_path = repository.resolve_points_path(settings.points.points_path)
+        legacy_path = legacy_points_path()
+        if configured_points_path == points_path() and not configured_points_path.exists() and legacy_path.is_file():
+            try:
+                configured_points_path.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(legacy_path, configured_points_path)
+            except OSError as error:
+                warning = translate("The legacy points file could not be migrated: {error}").format(error=error)
+                self._startup_warning = (
+                    f"{self._startup_warning}\n\n{warning}" if self._startup_warning else warning
+                )
+
         service = AutomationService(
             settings=settings,
             mouse=mouse,
             action_dispatcher=actions,
             capture_factory=ScreenCaptureAdapter,
-            default_points_path=points_path(),
+            default_points_path=configured_points_path,
         )
-        if points_path().is_file():
+        if configured_points_path.is_file():
             try:
                 service.load_points()
             except PointFileError as error:
-                warning = translate("The default points file could not be loaded: {error}").format(error=error)
+                warning = translate("The preset points file could not be loaded: {error}").format(error=error)
                 self._startup_warning = (
                     f"{self._startup_warning}\n\n{warning}" if self._startup_warning else warning
                 )
-        frame = MainFrame(settings, repository.load_defaults(), translate)
+        try:
+            preset_names = repository.preset_names()
+        except Exception:
+            preset_names = tuple(f"Preset {index}" for index in range(1, 11))
+        frame = MainFrame(
+            settings,
+            repository.load_defaults(repository.active_preset),
+            translate,
+            preset_names,
+            repository.active_preset,
+        )
         controller = GuiController(frame, service, repository, keyboard, actions, translate)
-        hotkeys = HotkeyManager(keyboard, controller.hotkey_callbacks())
+        hotkeys = HotkeyManager(
+            keyboard,
+            controller.hotkey_callbacks(),
+            controller.preset_hotkey_callbacks(),
+        )
         controller.set_hotkey_manager(hotkeys)
         frame.bind_controller(controller)
         self.controller = controller

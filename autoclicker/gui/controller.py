@@ -1,14 +1,26 @@
 from __future__ import annotations
 
 import threading
+from dataclasses import replace
 from pathlib import Path
 
 import wx
 
 from autoclicker.adapters.keyboard import HotkeyManager
-from autoclicker.automation.points import Point, PointFileError
+from autoclicker.automation.points import (
+    Point,
+    PointFileError,
+    load_points_file,
+    save_points_file,
+)
 from autoclicker.automation.service import AutomationError, AutomationService, RunMode
-from autoclicker.settings.model import AppSettings, SettingsValidationError, validate_settings
+from autoclicker.settings.model import (
+    AppSettings,
+    PointsSettings,
+    PRESET_SWITCH_HOTKEYS,
+    SettingsValidationError,
+    validate_settings,
+)
 from autoclicker.settings.repository import SettingsRepository
 
 
@@ -32,6 +44,7 @@ class GuiController:
         self._call_after = call_after
         self._hotkeys: HotkeyManager | None = None
         self._settings = service.settings
+        self._active_preset = repository.active_preset
         self._closing = False
         self._shutdown_lock = threading.Lock()
         self._shutdown_complete = False
@@ -53,6 +66,17 @@ class GuiController:
             "one_autoclick_run_hotkey": self.on_run_once,
             "start_stop_cv_hotkey": self.on_toggle_cv,
             "exit_hotkey": lambda: self._call_after(self.frame.Close),
+        }
+
+    def preset_hotkey_callbacks(self):
+        return {
+            hotkey: (
+                lambda preset_index=index: self._call_after(
+                    self.on_select_preset,
+                    preset_index,
+                )
+            )
+            for index, hotkey in enumerate(PRESET_SWITCH_HOTKEYS)
         }
 
     def on_record_point(self, event=None) -> None:
@@ -120,28 +144,95 @@ class GuiController:
             return
         path = self.frame.choose_points_to_open(self.service.document_path)
         if path is not None:
-            self._load(path)
+            self._load_and_select_points_path(path)
 
     def on_save_points(self, event=None) -> bool:
         return self._save(self.service.document_path)
 
     def on_save_points_as(self, event=None) -> bool:
         path = self.frame.choose_points_to_save(self.service.document_path)
-        return False if path is None else self._save(path)
+        return False if path is None else self._save_as_and_select_points_path(path)
+
+    def on_browse_points_path(self, event=None) -> None:
+        raw_path = self.frame.settings_panel.general.points_path.GetValue()
+        initial_path = self.repository.resolve_points_path(raw_path or "points.txt")
+        path = self.frame.choose_preset_points_path(initial_path)
+        if path is not None:
+            self.frame.settings_panel.general.points_path.SetValue(
+                self.repository.serialize_points_path(path)
+            )
+
+    def on_select_preset(self, event_or_index=None) -> None:
+        if isinstance(event_or_index, int):
+            index = event_or_index
+        else:
+            index = self.frame.settings_panel.preset_choice.GetSelection()
+        if index == self._active_preset:
+            self.frame.settings_panel.preset_choice.SetSelection(self._active_preset)
+            return
+
+        previous = self._settings
+        if not self.service.stop_and_wait():
+            self.frame.settings_panel.preset_choice.SetSelection(self._active_preset)
+            self._show_error(self._("Could not switch presets while automation is stopping."))
+            return
+
+        try:
+            if self.service.dirty:
+                self.service.save_points()
+            candidate = self.repository.load_preset(index)
+            self._validate(candidate)
+            target_path = self.repository.resolve_points_path(candidate.points.points_path)
+            points = load_points_file(target_path) if target_path.is_file() else ()
+        except (OSError, PointFileError, SettingsValidationError, TypeError, ValueError) as error:
+            self.frame.settings_panel.preset_choice.SetSelection(self._active_preset)
+            self._show_error(self._("Could not switch preset: {error}").format(error=error))
+            return
+
+        if self._hotkeys is None:
+            self.frame.settings_panel.preset_choice.SetSelection(self._active_preset)
+            self._show_error(self._("Global hotkeys are not initialized."))
+            return
+
+        try:
+            self._hotkeys.apply(candidate.hotkeys)
+            self.repository.set_active_preset(index)
+        except Exception as error:
+            try:
+                self._hotkeys.apply(previous.hotkeys)
+            except Exception:
+                pass
+            self.frame.settings_panel.preset_choice.SetSelection(self._active_preset)
+            self._show_error(self._("Could not switch preset: {error}").format(error=error))
+            return
+
+        self._active_preset = index
+        self._settings = candidate
+        self.service.update_settings(candidate)
+        self.service.replace_points_document(points, target_path)
+        self.frame.set_preset(
+            candidate,
+            self.repository.load_defaults(index),
+            self.repository.preset_names(),
+            index,
+        )
 
     def on_apply_settings(self, event=None) -> None:
         try:
             candidate = self.frame.candidate_settings()
-            validate_settings(
-                candidate,
-                hotkey_validator=self.keyboard.is_valid_combination,
-                action_validator=self.action_dispatcher.is_valid,
-            )
+            self._validate(candidate)
+            target_path = self.repository.resolve_points_path(candidate.points.points_path)
+            path_changed = target_path.resolve() != self.service.document_path.resolve()
+            replacement_points: tuple[Point, ...] | None = None
+            if path_changed:
+                if self.service.dirty:
+                    self.service.save_points()
+                replacement_points = load_points_file(target_path) if target_path.is_file() else ()
         except SettingsValidationError as error:
             self.frame.settings_panel.hotkeys.set_errors(error.errors)
             self._show_error("\n".join(self._(message) for message in error.errors.values()))
             return
-        except (TypeError, ValueError) as error:
+        except (OSError, PointFileError, TypeError, ValueError) as error:
             self._show_error(str(error))
             return
 
@@ -152,7 +243,7 @@ class GuiController:
         previous = self._settings
         try:
             self._hotkeys.apply(candidate.hotkeys)
-            self.repository.save(candidate)
+            self.repository.save(candidate, self._active_preset)
         except Exception as error:
             try:
                 self._hotkeys.apply(previous.hotkeys)
@@ -163,6 +254,11 @@ class GuiController:
 
         self._settings = candidate
         self.service.update_settings(candidate)
+        if replacement_points is not None:
+            self.service.replace_points_document(replacement_points, target_path)
+        names = self.repository.preset_names()
+        self.frame.settings_panel.set_preset_names(names)
+        self.frame.settings_panel.preset_choice.SetSelection(self._active_preset)
         self.frame.settings_panel.hotkeys.clear_errors()
         self.frame.show_info(self._("Settings applied successfully."))
 
@@ -195,6 +291,13 @@ class GuiController:
         if self._hotkeys is not None:
             self._hotkeys.close()
 
+    def _validate(self, settings: AppSettings) -> None:
+        validate_settings(
+            settings,
+            hotkey_validator=self.keyboard.is_valid_combination,
+            action_validator=self.action_dispatcher.is_valid,
+        )
+
     def _start(self, starter) -> None:
         try:
             if not starter():
@@ -205,11 +308,41 @@ class GuiController:
             else:
                 self._show_error(str(error))
 
-    def _load(self, path: Path) -> None:
+    def _load_and_select_points_path(self, path: Path) -> None:
         try:
-            self.service.load_points(path)
-        except PointFileError as error:
+            points = load_points_file(path)
+            candidate = replace(
+                self._settings,
+                points=PointsSettings(self.repository.serialize_points_path(path)),
+            )
+            self.repository.save(candidate, self._active_preset)
+        except (OSError, PointFileError, ValueError) as error:
             self._show_error(str(error))
+            return
+
+        self._settings = candidate
+        self.service.update_settings(candidate)
+        self.service.replace_points_document(points, path)
+        self.frame.settings_panel.general.points_path.SetValue(candidate.points.points_path)
+
+    def _save_as_and_select_points_path(self, path: Path) -> bool:
+        candidate = replace(
+            self._settings,
+            points=PointsSettings(self.repository.serialize_points_path(path)),
+        )
+        points = self.service.points()
+        try:
+            save_points_file(path, points)
+            self.repository.save(candidate, self._active_preset)
+        except (OSError, ValueError) as error:
+            self._show_error(self._("Could not save points: {error}").format(error=error))
+            return False
+
+        self._settings = candidate
+        self.service.update_settings(candidate)
+        self.service.replace_points_document(points, path)
+        self.frame.settings_panel.general.points_path.SetValue(candidate.points.points_path)
+        return True
 
     def _save(self, path: Path) -> bool:
         try:

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoclicker 0.4.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Den1k22/autoclicker/issues\n"
-"POT-Creation-Date: 2026-07-27 18:29+0300\n"
+"POT-Creation-Date: 2026-07-27 21:32+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,138 +18,152 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: autoclicker/gui/controller.py:72
+#: autoclicker/gui/controller.py:96
 msgid "Coordinates must be integers and delays cannot be negative."
 msgstr ""
 
-#: autoclicker/gui/controller.py:79
+#: autoclicker/gui/controller.py:103
 msgid "The selected point no longer exists."
 msgstr ""
 
-#: autoclicker/gui/controller.py:96
+#: autoclicker/gui/controller.py:120
 msgid "Mesh generation requires exactly three points."
 msgstr ""
 
-#: autoclicker/gui/controller.py:98
+#: autoclicker/gui/controller.py:122
 msgid "Mesh width and height must both be greater than 1."
 msgstr ""
 
-#: autoclicker/gui/controller.py:149
+#: autoclicker/gui/controller.py:177
+msgid "Could not switch presets while automation is stopping."
+msgstr ""
+
+#: autoclicker/gui/controller.py:189 autoclicker/gui/controller.py:206
+#, python-brace-format
+msgid "Could not switch preset: {error}"
+msgstr ""
+
+#: autoclicker/gui/controller.py:194 autoclicker/gui/controller.py:240
 msgid "Global hotkeys are not initialized."
 msgstr ""
 
-#: autoclicker/gui/controller.py:161
+#: autoclicker/gui/controller.py:252
 #, python-brace-format
 msgid "Could not apply settings: {error}"
 msgstr ""
 
-#: autoclicker/gui/controller.py:167
+#: autoclicker/gui/controller.py:263
 msgid "Settings applied successfully."
 msgstr ""
 
-#: autoclicker/gui/controller.py:201
+#: autoclicker/gui/controller.py:304
 msgid "Another automation mode is already running."
 msgstr ""
 
-#: autoclicker/gui/controller.py:204
+#: autoclicker/gui/controller.py:307
 msgid "Record or load at least one point first."
 msgstr ""
 
-#: autoclicker/gui/controller.py:218
+#: autoclicker/gui/controller.py:338 autoclicker/gui/controller.py:351
 #, python-brace-format
 msgid "Could not save points: {error}"
 msgstr ""
 
-#: autoclicker/gui/controller.py:242
+#: autoclicker/gui/controller.py:375
 #, python-brace-format
 msgid "Automation stopped because of an error: {error}"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:43
+#: autoclicker/gui/main_frame.py:52
 msgid "Run once"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:44
+#: autoclicker/gui/main_frame.py:53
 msgid "Start points"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:45
+#: autoclicker/gui/main_frame.py:54
 msgid "Start CV"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:46
+#: autoclicker/gui/main_frame.py:55
 msgid "Stop"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:94
+#: autoclicker/gui/main_frame.py:117
 msgid "Idle"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:95
+#: autoclicker/gui/main_frame.py:118
 msgid "Running points once"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:96
+#: autoclicker/gui/main_frame.py:119
 msgid "Running points continuously"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:97
+#: autoclicker/gui/main_frame.py:120
 msgid "Running computer vision"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:107
+#: autoclicker/gui/main_frame.py:130
 msgid "Autoclicker error"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:110
+#: autoclicker/gui/main_frame.py:133
 msgid "Autoclicker"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:115
+#: autoclicker/gui/main_frame.py:138
 msgid "The points list has unsaved changes. Save before continuing?"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:116
+#: autoclicker/gui/main_frame.py:139
 msgid "Unsaved points"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:127
+#: autoclicker/gui/main_frame.py:150
 msgid "Load points"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:130 autoclicker/gui/main_frame.py:144
+#: autoclicker/gui/main_frame.py:153 autoclicker/gui/main_frame.py:167
+#: autoclicker/gui/main_frame.py:181
 msgid "Text files (*.txt)|*.txt|All files (*.*)|*.*"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:141
+#: autoclicker/gui/main_frame.py:164
 msgid "Save points as"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:155
+#: autoclicker/gui/main_frame.py:178
+msgid "Choose preset points file"
+msgstr ""
+
+#: autoclicker/gui/main_frame.py:192
 msgid "&Load points...\tCtrl+O"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:156
+#: autoclicker/gui/main_frame.py:193
 msgid "&Save points\tCtrl+S"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:157
+#: autoclicker/gui/main_frame.py:194
 msgid "Save points &as..."
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:159
+#: autoclicker/gui/main_frame.py:196
 msgid "E&xit"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:160
+#: autoclicker/gui/main_frame.py:197
 msgid "&File"
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:163
+#: autoclicker/gui/main_frame.py:200
 msgid "&About..."
 msgstr ""
 
-#: autoclicker/gui/main_frame.py:164
+#: autoclicker/gui/main_frame.py:201
 msgid "&Help"
 msgstr ""
 
@@ -189,118 +203,134 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:29
-msgid "Language"
+#: autoclicker/gui/panels/settings.py:32
+msgid "Preset name"
+msgstr ""
+
+#: autoclicker/gui/panels/settings.py:36
+msgid "Points file"
 msgstr ""
 
 #: autoclicker/gui/panels/settings.py:43
+msgid "Browse..."
+msgstr ""
+
+#: autoclicker/gui/panels/settings.py:52
+msgid "Language"
+msgstr ""
+
+#: autoclicker/gui/panels/settings.py:66
 msgid "Language change takes effect after restarting the application."
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:53
+#: autoclicker/gui/panels/settings.py:76
 msgid "Default delay before click (ms)"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:59
+#: autoclicker/gui/panels/settings.py:82
 msgid "Default delay after click (ms)"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:93
+#: autoclicker/gui/panels/settings.py:120
 msgid "Region top"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:94
+#: autoclicker/gui/panels/settings.py:121
 msgid "Region left"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:95
+#: autoclicker/gui/panels/settings.py:122
 msgid "Region width"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:96
+#: autoclicker/gui/panels/settings.py:123
 msgid "Region height"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:97
+#: autoclicker/gui/panels/settings.py:124
 msgid "Target red"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:98
+#: autoclicker/gui/panels/settings.py:125
 msgid "Target green"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:99
+#: autoclicker/gui/panels/settings.py:126
 msgid "Target blue"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:101
+#: autoclicker/gui/panels/settings.py:128
 msgid "Delay between frames (ms)"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:103
+#: autoclicker/gui/panels/settings.py:130
 msgid "Action cooldown (ms)"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:105
+#: autoclicker/gui/panels/settings.py:132
 msgid "Second action delay (ms)"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:107
+#: autoclicker/gui/panels/settings.py:134
 msgid "First action"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:108
+#: autoclicker/gui/panels/settings.py:135
 msgid "Second action"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:156
+#: autoclicker/gui/panels/settings.py:183
 msgid "Points across"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:157
+#: autoclicker/gui/panels/settings.py:184
 msgid "Points down"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:162
+#: autoclicker/gui/panels/settings.py:189
 msgid ""
 "Mesh generation uses exactly three recorded points: origin, horizontal "
 "extent, and vertical extent."
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:168
+#: autoclicker/gui/panels/settings.py:195
 msgid "Create mesh"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:193
-#: autoclicker/gui/panels/settings.py:222
+#: autoclicker/gui/panels/settings.py:220
+#: autoclicker/gui/panels/settings.py:249
 msgid "Use one key or one simultaneous combination, for example ctrl+alt+s."
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:197
+#: autoclicker/gui/panels/settings.py:224
 msgid "Restore default hotkeys"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:243
+#: autoclicker/gui/panels/settings.py:272
 msgid "General"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:244
+#: autoclicker/gui/panels/settings.py:273
 msgid "Computer vision"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:245
+#: autoclicker/gui/panels/settings.py:274
 msgid "Mesh"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:246
+#: autoclicker/gui/panels/settings.py:275
 msgid "Hotkeys"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:251
+#: autoclicker/gui/panels/settings.py:279
+msgid "Preset"
+msgstr ""
+
+#: autoclicker/gui/panels/settings.py:289
 msgid "Restore all defaults"
 msgstr ""
 
-#: autoclicker/gui/panels/settings.py:252
+#: autoclicker/gui/panels/settings.py:290
 msgid "Apply settings"
 msgstr ""
 
@@ -327,101 +357,118 @@ msgstr ""
 
 #: autoclicker/i18n/messages.py:12
 #, python-brace-format
-msgid "The default points file could not be loaded: {error}"
+msgid "The legacy points file could not be migrated: {error}"
 msgstr ""
 
 #: autoclicker/i18n/messages.py:13
+#, python-brace-format
+msgid "The preset points file could not be loaded: {error}"
+msgstr ""
+
+#: autoclicker/i18n/messages.py:14
 #, python-brace-format
 msgid "{count} point"
 msgid_plural "{count} points"
 msgstr[0] ""
 msgstr[1] ""
 
-#: autoclicker/i18n/messages.py:15
+#: autoclicker/i18n/messages.py:16
 msgid "Language must be English or Russian."
 msgstr ""
 
-#: autoclicker/i18n/messages.py:16
-msgid "Delay before a click cannot be negative."
-msgstr ""
-
 #: autoclicker/i18n/messages.py:17
-msgid "Delay after a click cannot be negative."
+msgid "Preset name cannot be empty."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:18
-msgid "Mesh width must be greater than 1."
+msgid "Points path cannot be empty."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:19
-msgid "Mesh height must be greater than 1."
+msgid "Delay before a click cannot be negative."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:20
-msgid "CV region width must be greater than 0."
+msgid "Delay after a click cannot be negative."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:21
-msgid "CV region height must be greater than 0."
+msgid "Mesh width must be greater than 1."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:22
-msgid "RGB values must be between 0 and 255."
+msgid "Mesh height must be greater than 1."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:23
-msgid "CV timing values cannot be negative."
+msgid "CV region width must be greater than 0."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:24
-msgid "Hotkeys cannot be empty."
+msgid "CV region height must be greater than 0."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:25
-msgid "Unsupported hotkey."
+msgid "RGB values must be between 0 and 255."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:26
-msgid "Hotkey duplicates another action."
+msgid "CV timing values cannot be negative."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:27
-msgid "CV actions cannot be empty."
+msgid "Hotkeys cannot be empty."
 msgstr ""
 
 #: autoclicker/i18n/messages.py:28
+msgid "Unsupported hotkey."
+msgstr ""
+
+#: autoclicker/i18n/messages.py:29
+msgid "Hotkey duplicates another action."
+msgstr ""
+
+#: autoclicker/i18n/messages.py:30
+msgid "Hotkey is reserved for preset selection."
+msgstr ""
+
+#: autoclicker/i18n/messages.py:31
+msgid "CV actions cannot be empty."
+msgstr ""
+
+#: autoclicker/i18n/messages.py:32
 msgid "Unsupported CV action."
 msgstr ""
 
-#: autoclicker/settings/model.py:16
+#: autoclicker/settings/model.py:29
 msgid "Add point"
 msgstr ""
 
-#: autoclicker/settings/model.py:17
+#: autoclicker/settings/model.py:30
 msgid "Remove last point"
 msgstr ""
 
-#: autoclicker/settings/model.py:18
+#: autoclicker/settings/model.py:31
 msgid "Remove all points"
 msgstr ""
 
-#: autoclicker/settings/model.py:19
+#: autoclicker/settings/model.py:32
 msgid "Start continuous clicking"
 msgstr ""
 
-#: autoclicker/settings/model.py:20
+#: autoclicker/settings/model.py:33
 msgid "Stop automation"
 msgstr ""
 
-#: autoclicker/settings/model.py:21
+#: autoclicker/settings/model.py:34
 msgid "Run points once"
 msgstr ""
 
-#: autoclicker/settings/model.py:22
+#: autoclicker/settings/model.py:35
 msgid "Start or stop computer vision"
 msgstr ""
 
-#: autoclicker/settings/model.py:23
+#: autoclicker/settings/model.py:36
 msgid "Exit application"
 msgstr ""
 

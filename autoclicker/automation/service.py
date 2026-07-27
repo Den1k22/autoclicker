@@ -162,12 +162,17 @@ class AutomationService:
 
     def save_points(self, path: Path | None = None) -> Path:
         target = Path(path) if path is not None else self.document_path
-        save_points_file(target, self.points())
+        points = self.points()
+        save_points_file(target, points)
+        self.replace_points_document(points, target)
+        return target
+
+    def replace_points_document(self, points: tuple[Point, ...], path: Path) -> None:
+        self._points.replace(points)
         with self._lock:
-            self._document_path = target
+            self._document_path = Path(path)
             self._dirty = False
         self._notify_points()
-        return target
 
     def start_points_once(self) -> bool:
         points = self.points()
@@ -214,6 +219,14 @@ class AutomationService:
                 return False
             self._stop_event.set()
             return True
+
+    def stop_and_wait(self, timeout: float = 2.0) -> bool:
+        self.stop()
+        with self._lock:
+            worker = self._worker
+        if worker is not None and worker is not threading.current_thread():
+            worker.join(timeout)
+        return self.mode == RunMode.IDLE
 
     def shutdown(self, timeout: float = 2.0) -> None:
         self.stop()

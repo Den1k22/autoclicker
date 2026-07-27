@@ -10,6 +10,7 @@ from autoclicker.helpers.paths import default_settings_path
 from autoclicker.settings import (
     DelaySettings,
     MeshSettings,
+    PointsSettings,
     SettingsRepository,
     SettingsValidationError,
     UiSettings,
@@ -54,11 +55,14 @@ class SettingsRepositoryTests(unittest.TestCase):
             self.assertEqual(settings.hotkeys.add_point_hotkey, "ctrl+alt+x")
             self.assertEqual(settings.delays.delay_before_ms, 75)
             self.assertEqual(parser.get("CUSTOM", "keep_me"), "yes")
-            self.assertTrue(parser.has_option("HOTKEYS", "exit_hotkey"))
-            self.assertFalse(parser.has_option("HOTKEYS", "save_points_hotkey"))
-            self.assertFalse(parser.has_option("HOTKEYS", "load_points_hotkey"))
-            self.assertFalse(parser.has_option("HOTKEYS", "create_mesh_hotkey"))
+            self.assertTrue(parser.has_option("PRESET_1.HOTKEYS", "exit_hotkey"))
+            self.assertFalse(parser.has_section("HOTKEYS"))
+            self.assertFalse(parser.has_option("PRESET_1.HOTKEYS", "save_points_hotkey"))
+            self.assertFalse(parser.has_option("PRESET_1.HOTKEYS", "load_points_hotkey"))
+            self.assertFalse(parser.has_option("PRESET_1.HOTKEYS", "create_mesh_hotkey"))
             self.assertEqual(parser.get("MAIN", "language"), "en")
+            self.assertEqual(parser.get("PRESET_10", "name"), "Preset 10")
+            self.assertEqual(parser.get("PRESET_10.POINTS", "points_path"), "points.txt")
 
     def test_round_trip_save_updates_all_typed_sections(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -75,6 +79,27 @@ class SettingsRepositoryTests(unittest.TestCase):
             repository.save(changed)
 
             self.assertEqual(repository.load(), changed)
+
+    def test_presets_are_independent_and_active_selection_is_persisted(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "config" / "settings.ini"
+            repository = SettingsRepository(path, default_settings_path())
+            repository.load()
+            second = replace(
+                repository.load_preset(1),
+                preset_name="Second CV",
+                points=PointsSettings("second.txt"),
+                delays=DelaySettings(75, 90),
+            )
+
+            repository.save(second, 1)
+            repository.set_active_preset(1)
+            reloaded = SettingsRepository(path, default_settings_path())
+
+            self.assertEqual(reloaded.load(), second)
+            self.assertEqual(reloaded.active_preset, 1)
+            self.assertEqual(reloaded.preset_names()[1], "Second CV")
+            self.assertEqual(reloaded.load_preset(0).points.points_path, "points.txt")
 
 
 class SettingsValidationTests(unittest.TestCase):
@@ -113,3 +138,11 @@ class SettingsValidationTests(unittest.TestCase):
 
         self.assertIn("add_point_hotkey", context.exception.errors)
         self.assertIn("remove_all_points_hotkey", context.exception.errors)
+
+    def test_preset_switch_hotkeys_are_reserved(self):
+        invalid = make_settings(hotkeys=make_hotkeys(add_point_hotkey="1+CONTROL"))
+
+        with self.assertRaises(SettingsValidationError) as context:
+            validate_settings(invalid, hotkey_validator=lambda value: True)
+
+        self.assertIn("add_point_hotkey", context.exception.errors)

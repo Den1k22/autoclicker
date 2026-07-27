@@ -5,11 +5,33 @@ from typing import Callable, Mapping
 
 
 SUPPORTED_LANGUAGES = ("en", "ru")
+PRESET_COUNT = 10
+PRESET_SWITCH_HOTKEYS = (
+    "ctrl+1",
+    "ctrl+2",
+    "ctrl+3",
+    "ctrl+4",
+    "ctrl+5",
+    "ctrl+6",
+    "ctrl+7",
+    "ctrl+8",
+    "ctrl+9",
+    "ctrl+0",
+)
 
 
 def N_(message: str) -> str:
     """Mark a deferred string for catalog extraction."""
     return message
+
+
+def normalize_hotkey(value: str) -> str:
+    aliases = {"control": "ctrl"}
+    tokens = (
+        aliases.get(token.strip().casefold(), token.strip().casefold())
+        for token in value.split("+")
+    )
+    return "+".join(sorted(tokens))
 
 
 HOTKEY_LABELS = {
@@ -86,12 +108,19 @@ class UiSettings:
 
 
 @dataclass(frozen=True, slots=True)
+class PointsSettings:
+    points_path: str
+
+
+@dataclass(frozen=True, slots=True)
 class AppSettings:
     hotkeys: HotkeySettings
     delays: DelaySettings
     mesh: MeshSettings
     cv: CvSettings
     ui: UiSettings
+    preset_name: str
+    points: PointsSettings
 
 
 class SettingsValidationError(ValueError):
@@ -106,6 +135,11 @@ def validate_settings(
     action_validator: Callable[[str], bool] | None = None,
 ) -> None:
     errors: dict[str, str] = {}
+
+    if not settings.preset_name.strip():
+        errors["preset_name"] = "Preset name cannot be empty."
+    if not settings.points.points_path.strip():
+        errors["points_path"] = "Points path cannot be empty."
 
     if settings.ui.language not in SUPPORTED_LANGUAGES:
         errors["language"] = "Language must be English or Russian."
@@ -142,12 +176,15 @@ def validate_settings(
             errors[name] = "CV timing values cannot be negative."
 
     normalized_hotkeys: dict[str, str] = {}
+    reserved_hotkeys = {normalize_hotkey(hotkey) for hotkey in PRESET_SWITCH_HOTKEYS}
     for name, hotkey in settings.hotkeys.as_dict().items():
-        normalized = hotkey.strip().casefold()
+        normalized = normalize_hotkey(hotkey.strip())
         if not normalized:
             errors[name] = "Hotkeys cannot be empty."
         elif hotkey_validator is not None and not hotkey_validator(hotkey):
             errors[name] = "Unsupported hotkey."
+        elif normalized in reserved_hotkeys:
+            errors[name] = "Hotkey is reserved for preset selection."
         elif normalized in normalized_hotkeys:
             errors[name] = "Hotkey duplicates another action."
         else:

@@ -16,6 +16,10 @@ def config_path() -> Path:
 
 
 def points_path() -> Path:
+    return config_path().parent / "points.txt"
+
+
+def legacy_points_path() -> Path:
     return application_dir() / "points.txt"
 
 

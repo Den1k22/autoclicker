@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import unittest
 from dataclasses import replace
+from pathlib import Path
 from unittest import mock
 
 from autoclicker.gui.controller import GuiController
-from autoclicker.settings.model import DelaySettings, UiSettings
+from autoclicker.settings.model import DelaySettings, PointsSettings, UiSettings
 from tests.factories import make_hotkeys, make_settings
 
 
@@ -20,6 +21,10 @@ class GuiControllerTests(unittest.TestCase):
         self.service = mock.MagicMock()
         self.service.settings = self.settings
         self.repository = mock.MagicMock()
+        self.repository.active_preset = 0
+        self.repository.resolve_points_path.return_value = Path("points.txt")
+        self.repository.preset_names.return_value = tuple(f"Preset {index}" for index in range(1, 11))
+        self.repository.load_defaults.return_value = self.settings
         self.keyboard = mock.MagicMock()
         self.keyboard.is_valid_combination.return_value = True
         self.actions = mock.MagicMock()
@@ -43,7 +48,7 @@ class GuiControllerTests(unittest.TestCase):
         self.controller.on_apply_settings()
 
         self.hotkeys.apply.assert_called_once_with(candidate.hotkeys)
-        self.repository.save.assert_called_once_with(candidate)
+        self.repository.save.assert_called_once_with(candidate, 0)
         self.service.update_settings.assert_called_once_with(candidate)
         self.frame.show_info.assert_called_once_with("Settings applied successfully.")
 
@@ -67,7 +72,7 @@ class GuiControllerTests(unittest.TestCase):
 
         self.controller.on_apply_settings()
 
-        self.repository.save.assert_called_once_with(candidate)
+        self.repository.save.assert_called_once_with(candidate, 0)
         self.service.update_settings.assert_called_once_with(candidate)
         self.frame.Close.assert_not_called()
         self.frame.show_info.assert_called_once_with("Settings applied successfully.")
@@ -77,6 +82,36 @@ class GuiControllerTests(unittest.TestCase):
 
         self.service.record_current_point.assert_called_once_with()
         self.service.create_mesh.assert_not_called()
+
+    def test_preset_hotkeys_map_one_through_nine_and_zero_to_ten(self):
+        callbacks = self.controller.preset_hotkey_callbacks()
+
+        with mock.patch.object(self.controller, "on_select_preset") as select:
+            callbacks["ctrl+2"]()
+            callbacks["ctrl+0"]()
+
+        self.assertEqual(select.call_args_list, [mock.call(1), mock.call(9)])
+
+    def test_switch_stops_automation_saves_dirty_points_and_loads_target(self):
+        target = replace(
+            self.settings,
+            preset_name="Preset 2",
+            points=PointsSettings("points_2.txt"),
+        )
+        self.service.stop_and_wait.return_value = True
+        self.service.dirty = True
+        self.repository.load_preset.return_value = target
+        self.repository.resolve_points_path.return_value = Path("missing_points_2.txt")
+
+        self.controller.on_select_preset(1)
+
+        self.service.stop_and_wait.assert_called_once_with()
+        self.service.save_points.assert_called_once_with()
+        self.hotkeys.apply.assert_called_once_with(target.hotkeys)
+        self.repository.set_active_preset.assert_called_once_with(1)
+        self.service.update_settings.assert_called_once_with(target)
+        self.service.replace_points_document.assert_called_once_with((), Path("missing_points_2.txt"))
+        self.frame.set_preset.assert_called_once()
 
     def test_empty_dirty_point_list_does_not_prompt_on_close(self):
         self.service.dirty = True

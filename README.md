@@ -18,8 +18,9 @@ does not require switching back to the GUI.
 - Detect an exact configured RGB color inside an absolute screen region.
 - Execute configurable keyboard combinations or mouse buttons in CV mode.
 - Configure and immediately re-register global hotkeys.
+- Keep ten named presets and switch between them with global Ctrl+number shortcuts.
 - English and Russian interface languages.
-- Portable `config/settings.ini` and `points.txt` files beside the program.
+- Portable `config/settings.ini` and preset point files beside the program.
 
 Only one automation mode can run at a time. Closing the main window stops the
 current worker, unregisters all global keyboard hooks, and exits completely.
@@ -45,7 +46,7 @@ GUI capture button would record the GUI's cursor position.
 
 The right side contains:
 
-- **General**: language and default point delays.
+- **General**: preset name, points file, language, and default point delays.
 - **Computer vision**: capture region, exact target RGB value, timings, and
   actions.
 - **Mesh**: width and height, including both endpoints.
@@ -55,6 +56,13 @@ Use **Apply settings** to validate and save the full form. Hotkeys are
 re-registered immediately. Other values are used by the next operation; an
 already-running worker keeps its startup snapshot. A language change takes
 effect after restarting.
+
+The preset selector beside the settings buttons switches among ten presets.
+Preset names, point paths, delays, mesh values, CV values, and action hotkeys
+belong to the selected preset. Language and runtime mode remain global. Use
+Ctrl+1 through Ctrl+9 for Presets 1 through 9 and Ctrl+0 for Preset 10.
+Switching stops active automation and leaves it idle. Dirty points are saved
+before the target preset is loaded; unapplied form edits are not saved.
 
 The status bar shows the active mode and number of points. The bottom controls
 call the same service operations as the global hotkeys.
@@ -75,12 +83,19 @@ Default shortcuts are defined in `config/settings.ini`:
 | `exit_hotkey` | Close the application |
 
 Each shortcut must be one key or one simultaneous combination accepted by the
-`keyboard` library. Duplicate shortcuts are rejected.
+`keyboard` library. Duplicate shortcuts are rejected. Ctrl+0 through Ctrl+9 are
+reserved for preset selection and cannot be assigned to another action.
 
 ## Point files
 
-The default document is `points.txt` beside the executable and is loaded
-automatically when present. Each non-comment line has this format:
+Each preset has a `points_path` value. Relative paths are resolved from the
+portable `config` directory, so the default `points.txt` means
+`config/points.txt`. All ten presets initially share that path; choose another
+file in **General**, **Load points**, or **Save points as** to give a preset its
+own document. Existing root-level `points.txt` is copied into `config` during
+the first compatible startup when the new destination does not exist.
+
+Each non-comment line has this format:
 
 ```text
 x,y,delay_before_ms,delay_after_ms
@@ -89,7 +104,7 @@ x,y,delay_before_ms,delay_after_ms
 Loading is all-or-nothing. Blank lines and lines beginning with `#` are ignored.
 An empty or comment-only document represents an empty point list. Negative
 coordinates are supported for multi-monitor layouts. GUI **Load** and **Save
-As** change the active document used by the GUI file actions.
+As** change the active document and persist its path for the current preset.
 
 ## CV actions
 
@@ -159,3 +174,7 @@ repository root.
 The writable configuration is not embedded. On first launch, the executable
 creates `config/settings.ini` beside itself. If that directory is not writable,
 the GUI reports the problem instead of silently moving files elsewhere.
+Existing single-preset files are migrated into Preset 1, while Presets 2–10 are
+filled from immutable defaults. The active preset is stored in `[MAIN]`; each
+preset uses `PRESET_n` and `PRESET_n.HOTKEYS`, `.DELAYS`, `.MESH`, `.CV`, and
+`.POINTS` sections.

@@ -8,6 +8,7 @@ from autoclicker.settings.model import (
     DelaySettings,
     HotkeySettings,
     MeshSettings,
+    PointsSettings,
     UiSettings,
 )
 
@@ -47,5 +48,7 @@ def make_settings(**overrides) -> AppSettings:
             second_action="space",
         ),
         ui=UiSettings("en"),
+        preset_name="Preset 1",
+        points=PointsSettings("points.txt"),
     )
     return replace(settings, **overrides)

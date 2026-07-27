@@ -18,6 +18,8 @@ class MainFrame(wx.Frame):
         settings: AppSettings,
         defaults: AppSettings,
         translate: Callable[[str], str],
+        preset_names: tuple[str, ...] | None = None,
+        active_preset: int = 0,
     ):
         super().__init__(None, title="Autoclicker", size=(1120, 700))
         self.SetMinSize((900, 600))
@@ -34,7 +36,14 @@ class MainFrame(wx.Frame):
         outer = wx.BoxSizer(wx.VERTICAL)
         content = wx.BoxSizer(wx.HORIZONTAL)
         self.points_panel = PointsPanel(root, translate)
-        self.settings_panel = SettingsNotebook(root, settings, defaults, translate)
+        self.settings_panel = SettingsNotebook(
+            root,
+            settings,
+            defaults,
+            translate,
+            preset_names,
+            active_preset,
+        )
         content.Add(self.points_panel, 0, wx.EXPAND | wx.ALL, 6)
         content.Add(self.settings_panel, 1, wx.EXPAND | wx.ALL, 6)
         outer.Add(content, 1, wx.EXPAND)
@@ -67,6 +76,11 @@ class MainFrame(wx.Frame):
             controller.on_move_point,
         )
         self.settings_panel.apply_button.Bind(wx.EVT_BUTTON, controller.on_apply_settings)
+        self.settings_panel.preset_choice.Bind(wx.EVT_CHOICE, controller.on_select_preset)
+        self.settings_panel.general.browse_points_button.Bind(
+            wx.EVT_BUTTON,
+            controller.on_browse_points_path,
+        )
         self.settings_panel.mesh.create_button.Bind(wx.EVT_BUTTON, controller.on_create_mesh)
         self.run_once_button.Bind(wx.EVT_BUTTON, controller.on_run_once)
         self.start_points_button.Bind(wx.EVT_BUTTON, controller.on_start_points)
@@ -81,6 +95,15 @@ class MainFrame(wx.Frame):
 
     def candidate_settings(self) -> AppSettings:
         return self.settings_panel.values()
+
+    def set_preset(
+        self,
+        settings: AppSettings,
+        defaults: AppSettings,
+        preset_names: tuple[str, ...],
+        active_preset: int,
+    ) -> None:
+        self.settings_panel.set_preset(settings, defaults, preset_names, active_preset)
 
     def set_points(self, points: tuple[Point, ...], dirty: bool, path: Path) -> None:
         self.points_panel.set_points(points)
@@ -143,6 +166,20 @@ class MainFrame(wx.Frame):
             defaultFile=initial_path.name,
             wildcard=self._("Text files (*.txt)|*.txt|All files (*.*)|*.*"),
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        )
+        try:
+            return Path(dialog.GetPath()) if dialog.ShowModal() == wx.ID_OK else None
+        finally:
+            dialog.Destroy()
+
+    def choose_preset_points_path(self, initial_path: Path) -> Path | None:
+        dialog = wx.FileDialog(
+            self,
+            self._("Choose preset points file"),
+            defaultDir=str(initial_path.parent),
+            defaultFile=initial_path.name,
+            wildcard=self._("Text files (*.txt)|*.txt|All files (*.*)|*.*"),
+            style=wx.FD_SAVE,
         )
         try:
             return Path(dialog.GetPath()) if dialog.ShowModal() == wx.ID_OK else None

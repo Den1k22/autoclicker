@@ -13,6 +13,7 @@ from autoclicker.settings.model import (
     HOTKEY_LABELS,
     HotkeySettings,
     MeshSettings,
+    PointsSettings,
     UiSettings,
 )
 
@@ -22,6 +23,28 @@ class GeneralPanel(wx.Panel):
         super().__init__(parent)
         self._ = translate
         outer = wx.BoxSizer(wx.VERTICAL)
+
+        preset_grid = wx.FlexGridSizer(cols=2, vgap=10, hgap=8)
+        preset_grid.AddGrowableCol(1, 1)
+        self.preset_name = add_labeled_text(
+            self,
+            preset_grid,
+            self._("Preset name"),
+            settings.preset_name,
+        )
+        preset_grid.Add(
+            wx.StaticText(self, label=self._("Points file")),
+            0,
+            wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+            8,
+        )
+        points_controls = wx.BoxSizer(wx.HORIZONTAL)
+        self.points_path = wx.TextCtrl(self, value=settings.points.points_path)
+        self.browse_points_button = wx.Button(self, label=self._("Browse..."))
+        points_controls.Add(self.points_path, 1, wx.RIGHT, 8)
+        points_controls.Add(self.browse_points_button)
+        preset_grid.Add(points_controls, 1, wx.EXPAND)
+        outer.Add(preset_grid, 0, wx.EXPAND | wx.ALL, 12)
 
         language_grid = wx.FlexGridSizer(cols=2, vgap=10, hgap=8)
         language_grid.AddGrowableCol(1, 1)
@@ -62,7 +85,7 @@ class GeneralPanel(wx.Panel):
         outer.Add(delay_grid, 0, wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, 12)
         self.SetSizer(outer)
 
-    def values(self) -> tuple[UiSettings, DelaySettings]:
+    def values(self) -> tuple[UiSettings, DelaySettings, str, PointsSettings]:
         selection = max(self.language.GetSelection(), 0)
         language = list(SUPPORTED_LANGUAGES)[selection]
         return (
@@ -71,6 +94,8 @@ class GeneralPanel(wx.Panel):
                 delay_before_ms=self.delay_before.GetValue(),
                 delay_after_ms=self.delay_after.GetValue(),
             ),
+            self.preset_name.GetValue().strip(),
+            PointsSettings(self.points_path.GetValue().strip()),
         )
 
     def set_values(self, settings: AppSettings) -> None:
@@ -78,6 +103,8 @@ class GeneralPanel(wx.Panel):
         self.language.SetSelection(list(SUPPORTED_LANGUAGES).index(language))
         self.delay_before.SetValue(settings.delays.delay_before_ms)
         self.delay_after.SetValue(settings.delays.delay_after_ms)
+        self.preset_name.SetValue(settings.preset_name)
+        self.points_path.SetValue(settings.points.points_path)
 
 
 class CvPanel(wx.ScrolledWindow):
@@ -230,6 +257,8 @@ class SettingsNotebook(wx.Panel):
         settings: AppSettings,
         defaults: AppSettings,
         translate: Callable[[str], str],
+        preset_names: tuple[str, ...] | None = None,
+        active_preset: int = 0,
     ):
         super().__init__(parent)
         self._ = translate
@@ -247,6 +276,15 @@ class SettingsNotebook(wx.Panel):
         outer.Add(self.notebook, 1, wx.EXPAND)
 
         buttons = wx.BoxSizer(wx.HORIZONTAL)
+        self.preset_label = wx.StaticText(self, label=self._("Preset"))
+        self.preset_choice = wx.Choice(
+            self,
+            choices=list(preset_names or (settings.preset_name,)),
+        )
+        self.preset_choice.SetMinSize((190, -1))
+        self.preset_choice.SetSelection(active_preset)
+        buttons.Add(self.preset_label, 0, wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 8)
+        buttons.Add(self.preset_choice, 0, wx.ALIGN_CENTER_VERTICAL)
         buttons.AddStretchSpacer()
         self.reset_button = wx.Button(self, label=self._("Restore all defaults"))
         self.apply_button = wx.Button(self, label=self._("Apply settings"))
@@ -262,13 +300,15 @@ class SettingsNotebook(wx.Panel):
         )
 
     def values(self) -> AppSettings:
-        ui, delays = self.general.values()
+        ui, delays, preset_name, points = self.general.values()
         return AppSettings(
             hotkeys=self.hotkeys.values(),
             delays=delays,
             mesh=self.mesh.values(),
             cv=self.cv.values(),
             ui=ui,
+            preset_name=preset_name,
+            points=points,
         )
 
     def set_values(self, settings: AppSettings) -> None:
@@ -276,3 +316,21 @@ class SettingsNotebook(wx.Panel):
         self.cv.set_values(settings)
         self.mesh.set_values(settings)
         self.hotkeys.set_values(settings)
+
+    def set_preset(
+        self,
+        settings: AppSettings,
+        defaults: AppSettings,
+        preset_names: tuple[str, ...],
+        active_preset: int,
+    ) -> None:
+        self.defaults = defaults
+        self.set_values(settings)
+        self.set_preset_names(preset_names)
+        self.preset_choice.SetSelection(active_preset)
+
+    def set_preset_names(self, names: tuple[str, ...]) -> None:
+        selection = self.preset_choice.GetSelection()
+        self.preset_choice.Set(list(names))
+        if 0 <= selection < len(names):
+            self.preset_choice.SetSelection(selection)
