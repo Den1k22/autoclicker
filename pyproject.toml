@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "den1k22-autoclicker"
-version = "0.4.0"
+dynamic = ["version"]
 description = "A local Windows autoclicker with recorded points and exact-color computer vision."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -32,6 +32,9 @@ autoclicker = "autoclicker.app:main"
 
 [tool.setuptools.packages.find]
 include = ["autoclicker*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "autoclicker.version.VERSION"}
 
 [tool.setuptools.package-data]
 "autoclicker.resources" = ["*.ini"]

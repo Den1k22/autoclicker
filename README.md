@@ -118,7 +118,8 @@ English source messages are the fallback. Russian translations are stored in
 Update and compile catalogs from the repository root:
 
 ```powershell
-.\.venv\Scripts\pybabel.exe extract -F babel.cfg --project Autoclicker --version 0.4.0 --copyright-holder Den1k22 --msgid-bugs-address https://github.com/Den1k22/autoclicker/issues -o autoclicker\i18n\autoclicker.pot .
+$projectVersion = & .\.venv\Scripts\python.exe -c "from autoclicker.version import VERSION; print(VERSION)"
+.\.venv\Scripts\pybabel.exe extract -F babel.cfg --project Autoclicker --version $projectVersion --copyright-holder Den1k22 --msgid-bugs-address https://github.com/Den1k22/autoclicker/issues -o autoclicker\i18n\autoclicker.pot .
 .\.venv\Scripts\pybabel.exe update -i autoclicker\i18n\autoclicker.pot -d autoclicker\i18n\locales -l ru -D autoclicker
 .\.venv\Scripts\pybabel.exe compile -d autoclicker\i18n\locales -D autoclicker
 ```
@@ -136,6 +137,8 @@ still expect `pip install -r requirements.txt`. Run:
 ```
 
 Format Python with `autopep8` using a 120-character maximum line length.
+Change `VERSION` in `autoclicker/version.py` when releasing a new version.
+Setuptools and the About dialog both read that value.
 
 ## Building
 

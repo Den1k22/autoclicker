@@ -1,9 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-from pathlib import Path
 import runpy
-
-from PyInstaller.utils.hooks import copy_metadata
+from pathlib import Path
 
 
 project_root = Path(SPECPATH).resolve().parent
@@ -16,7 +14,7 @@ analysis = Analysis(
     [str(project_root / "main.py")],
     pathex=[str(project_root)],
     binaries=[],
-    datas=copy_metadata("den1k22-autoclicker") + [
+    datas=[
         (
             str(project_root / "autoclicker" / "resources"),
             "autoclicker/resources",

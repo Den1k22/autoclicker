@@ -37,6 +37,8 @@ that hide automation from a game or service.
 - `autoclicker/gui/`: wx frame, GUI controller, dialogs, and panels.
 - `autoclicker/i18n/`: gettext translator, template, Russian PO, and compiled MO.
 - `autoclicker/helpers/`: portable path resolution and time conversion only.
+- `autoclicker/version.py`: single source of truth for the application and
+  package version.
 - `autoclicker/resources/default_settings.ini`: immutable first-run defaults.
 - `config/settings.ini`: portable writable user configuration.
 - `tests/`: standard-library `unittest` coverage with mocked desktop adapters.

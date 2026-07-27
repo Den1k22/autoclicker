@@ -1,15 +1,10 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from importlib.metadata import PackageNotFoundError, version
 
 import wx
 
-
-try:
-    APPLICATION_VERSION = version("den1k22-autoclicker")
-except PackageNotFoundError:
-    APPLICATION_VERSION = "development"
+from autoclicker.version import VERSION
 
 
 class AboutDialog(wx.Dialog):
@@ -28,7 +23,7 @@ class AboutDialog(wx.Dialog):
         description.Wrap(520)
         outer.Add(description, 0, wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT | wx.BOTTOM, 12)
         outer.Add(
-            wx.StaticText(self, label=f'{translate("Version")}: {APPLICATION_VERSION}'),
+            wx.StaticText(self, label=f'{translate("Version")}: {VERSION}'),
             0,
             wx.ALIGN_CENTER | wx.BOTTOM,
             12,
